@@ -4,6 +4,10 @@ body {
   height: 100%;
 }
 
+#root {
+  height: 100%;
+}
+
 body {
   background: #eee;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -28,10 +32,10 @@ body {
   justify-content: center;
   align-items: center; */
 }
-
+/* 
 .swiper-slide img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
+} */

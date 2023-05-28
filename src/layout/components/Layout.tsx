@@ -11,18 +11,19 @@ import "./Layout.css";
 // import required modules
 import { Pagination } from "swiper";
 import Leaderboard from "../../Leaderboard/components/Leaderboard";
+import TokenController from "../../tokens/components/TokenController";
 
 const Layout = () => {
     return (
         <Swiper
             pagination
             modules={[Pagination]}
-        // className="mySwiper"
+            // className="mySwiper"
             initialSlide={1}
         >
             <SwiperSlide><Leaderboard /></SwiperSlide>
             <SwiperSlide>Home</SwiperSlide>
-            <SwiperSlide>Tokens</SwiperSlide>
+            <SwiperSlide><TokenController /></SwiperSlide>
         </Swiper>
     );
 }

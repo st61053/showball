@@ -13,16 +13,16 @@ function App() {
 
   return (
     <Box
-    sx={{
-      height: "85vh"
-    }}>
+      sx={{
+        height: "100%",
+      }}>
       {/* <Button
         variant='contained'
         onClick={() => dispatch(counter())}
       >
         {test}
       </Button> */}
-      <Layout></Layout>
+      <Layout />
     </Box>
   );
 }
