@@ -1,11 +1,15 @@
-import { Box, Button, Card, CardMedia, Typography } from "@mui/material";
-import kozel from "../../images/tokens/kozel-100.png";
+import { Box, Button, Typography } from "@mui/material";
+import TokenSwiper from "./TokenSwiper";
+import { useSelector } from "react-redux";
+import { GlobalState } from "../../global";
 
 
 const TokenController = () => {
+    const SELECTED_TOKEN = useSelector((state: GlobalState) => state.tokens.selectedToken);
     return (
         <Box
             sx={{
+                width: "100%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -14,30 +18,26 @@ const TokenController = () => {
         >
             <Box
                 sx={{
+                    width: "100%",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: "4em"
+                    // justifyContent: "space-between",
+                    gap: "2em"
                 }}
             >
+                <Typography
+                    variant="h5"
+                    textTransform={"uppercase"}
+                    sx={{
+                        fontWeight: "bold"
+                    }}
+                >
+                    {SELECTED_TOKEN?.name}
+                </Typography>
+
                 {/* Token list */}
-                <Box>
-                    <Card
-                        sx={{
-                            width: 250,
-                            height: 250,
-                            borderRadius: "50%"
-                        }}
-                    >
-                        <CardMedia
-                            component="img"
-                            height="250"
-                            image="../../images/tokens/kozel-100.png"
-                            alt="Paella dish"
-                        />
-                    </Card>
-                </Box>
+                <TokenSwiper />
 
                 {/* Button to add */}
                 <Box>

@@ -1,27 +1,25 @@
-import { Box, Button } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { GlobalState } from './global';
-import { counter } from './players/actions';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
+import { Box } from '@mui/material';
 import Layout from './layout/components/Layout';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { changeSelectedToken } from './tokens/actions';
+import { TOKENS } from './tokens/constants';
 
 function App() {
-
-  const test = useSelector((state: GlobalState) => state.players.test);
   const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+
+  useEffect(() => {
+    dispatch(changeSelectedToken(TOKENS[0]))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Box
       sx={{
         height: "100%",
       }}>
-      {/* <Button
-        variant='contained'
-        onClick={() => dispatch(counter())}
-      >
-        {test}
-      </Button> */}
       <Layout />
     </Box>
   );

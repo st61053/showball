@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
-import { playersReducer } from "./players/reducer";
+import { tokensReducer } from "./tokens/reducer";
 
 export declare type partialReducer = (partialStore: object) => object;
 
 export const createAppReducer = () => {
     return combineReducers({
-        players: playersReducer
+        tokens: tokensReducer
     });
 };
