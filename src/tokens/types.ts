@@ -1,5 +1,6 @@
 export interface ITokenState {
     selectedToken?: IToken;
+    tokens?: IToken[]
 }
 
 

@@ -1,9 +1,10 @@
 import { AppAction } from "../global";
-import { CHANGE_SELECTED_TOKEN } from "./constants";
+import { CHANGE_SELECTED_TOKEN, LOAD_TOKENS } from "./constants";
 import { ITokenState } from "./types";
 
 const defaultState: ITokenState = {
-  selectedToken: undefined
+  selectedToken: undefined,
+  tokens: []
 };
 
 export const tokensReducer = (
@@ -16,6 +17,11 @@ export const tokensReducer = (
         ...state,
         selectedToken : action.token
       };
+      case LOAD_TOKENS:
+        return {
+          ...state,
+          tokens : action.tokens
+        };
     default:
       return state;
   }

@@ -11,6 +11,7 @@ import "./Layout.css";
 import { Pagination } from "swiper";
 import Leaderboard from "../../Leaderboard/components/Leaderboard";
 import TokenController from "../../tokens/components/TokenController";
+import Store from "../../store/components/Store";
 
 const Layout = () => {
     return (
@@ -23,6 +24,7 @@ const Layout = () => {
             <SwiperSlide><Leaderboard /></SwiperSlide>
             <SwiperSlide>Home</SwiperSlide>
             <SwiperSlide><TokenController /></SwiperSlide>
+            <SwiperSlide><Store /></SwiperSlide>
         </Swiper>
     );
 }

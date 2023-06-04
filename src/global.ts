@@ -16,6 +16,7 @@ interface AppAction {
   type: string;
   // tokens
   token?: IToken;
+  tokens?: IToken[];
 }
 
 export type { GlobalState, AppAction, AppState };

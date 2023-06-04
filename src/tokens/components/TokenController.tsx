@@ -11,23 +11,23 @@ const TokenController = () => {
             sx={{
                 width: "100%",
                 display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "center",
-                height: "100%"
+                // justifyContent: "center",
+                height: "100%",
             }}
         >
             <Box
                 sx={{
-                    width: "100%",
                     display: "flex",
-                    flexDirection: "column",
+                    width: "100%",
+                    justifyContent: "center",
                     alignItems: "center",
-                    // justifyContent: "space-between",
-                    gap: "2em"
+                    flex: 0.7
                 }}
             >
                 <Typography
-                    variant="h5"
+                    variant="h4"
                     textTransform={"uppercase"}
                     sx={{
                         fontWeight: "bold"
@@ -35,25 +35,30 @@ const TokenController = () => {
                 >
                     {SELECTED_TOKEN?.name}
                 </Typography>
-
-                {/* Token list */}
-                <TokenSwiper />
-
-                {/* Button to add */}
-                <Box>
-                    <Button
-                        variant="contained"
-                        sx={{ width: 250, pt: 2, pb: 2 }}
-                    >
-
-                        <Typography>
-                            Přidat
-                        </Typography>
-                    </Button>
-                </Box>
-
-
             </Box>
+
+            {/* Token list */}
+            <TokenSwiper />
+
+
+            {/* Button to add */}
+            <Box
+                sx={{
+                    marginTop: "auto",
+                    pb: 12
+                }}
+            >
+                <Button
+                    variant="contained"
+                    sx={{ width: 250, pt: 2, pb: 2 }}
+                >
+
+                    <Typography>
+                        Přidat
+                    </Typography>
+                </Button>
+            </Box>
+
         </Box>
 
     );
