@@ -18,3 +18,22 @@ body {
   width: 100%;
   height: 100%;
 }
+
+#tsparticles {
+  height: 100%;
+  width: 100%;
+}
+
+.avatar {
+  animation: circleAnimation 10s linear infinite;
+}
+
+@keyframes circleAnimation {
+  0% {
+    transform: translate(-50%, -50%) rotateZ(0deg) translate(80px) rotateZ(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotateZ(360deg) translate(80px) rotateZ(-360deg);
+  }
+}

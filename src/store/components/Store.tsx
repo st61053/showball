@@ -3,15 +3,11 @@ import { useSelector } from "react-redux";
 import { GlobalState } from "../../global";
 import StoreItem from "./StoreItem";
 
-// Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
-import "swiper/css";
 import Coin from "./Coin";
 
 const Store = () => {
     const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
+    const SELECTED_TOKEN = useSelector((state: GlobalState) => state.store.selectedToken);
 
     return (
         <Box
@@ -71,8 +67,8 @@ const Store = () => {
 
                     {
                         TOKENS && TOKENS.map((token, index) =>
-                            <Grid item xs={3}>
-                                <StoreItem token={token} key={index} />
+                            <Grid item xs={3} key={index}>
+                                <StoreItem token={token} />
                             </Grid>
                         )
                     }
@@ -91,6 +87,7 @@ const Store = () => {
                 <Button
                     variant="contained"
                     sx={{ width: "100%", pt: 2, pb: 2, }}
+                    disabled={!Boolean(SELECTED_TOKEN)}
                 >
 
                     <Typography>

@@ -1,9 +1,11 @@
 import { IPlayerState } from "./players/types";
+import { IStoreState } from "./store/types";
 import { IToken, ITokenState } from "./tokens/types";
 
 interface GlobalState {
-  players: IPlayerState;
   tokens: ITokenState;
+  store: IStoreState;
+  players: IPlayerState;
 }
 
 interface AppState {

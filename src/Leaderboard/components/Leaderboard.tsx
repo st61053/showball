@@ -1,4 +1,6 @@
-import { Avatar, Box, Card, Typography } from "@mui/material";
+import { Box, Card, Divider } from "@mui/material";
+import TopPlace from "./TopPlace";
+import RowPlace from "./RowPlace";
 
 const Leaderboard = () => {
     return (
@@ -6,98 +8,42 @@ const Leaderboard = () => {
             sx={{
                 height: "100%",
                 p: 2
+                
             }}
         >
             <Card
                 sx={{
                     display: "flex",
                     flexDirection: "column",
-                    p: 2
                 }}
             >
                 <Box
                     sx={{
+                        p: 2,
                         display: "flex",
                         alignItems: "end",
-                        justifyContent: "center",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <TopPlace width={90} />
+                    <TopPlace width={115} />
+                    <TopPlace width={90} />
+
+                </Box>
+                <Divider />
+
+                <Box
+                    sx={{
+                        padding: "1em 2em",
+                        display: "flex",
+                        // alignItems: "center",
+                        flexDirection: "column",
                         gap: 1,
                     }}
                 >
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: 0.5
-                        }}
-                    >
-                        <Avatar sx={{
-                            width: 95,
-                            height: 95,
-                        }}
-
-                        >P</Avatar>
-                        <Typography
-                            variant="subtitle1"
-                            textTransform={"capitalize"}
-                            sx={{
-                                fontWeight: "bold",
-                            }}
-                        >
-                            {"Player"}
-                        </Typography>
-
-                    </Box>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: 0.5
-                        }}
-                    >
-                        <Avatar sx={{
-                            width: 110,
-                            height: 110,
-                        }}
-
-                        >P</Avatar>
-                        <Typography
-                            variant="subtitle1"
-                            textTransform={"capitalize"}
-                            sx={{
-                                fontWeight: "bold",
-                            }}
-                        >
-                            {"Player"}
-                        </Typography>
-
-                    </Box>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: 0.5
-                        }}
-                    >
-                        <Avatar sx={{
-                            width: 95,
-                            height: 95,
-                        }}
-
-                        >P</Avatar>
-                        <Typography
-                            variant="subtitle1"
-                            textTransform={"capitalize"}
-                            sx={{
-                                fontWeight: "bold",
-                            }}
-                        >
-                            {"Player"}
-                        </Typography>
-
-                    </Box>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((player, index) =>
+                        <RowPlace key={index} place={index + 4} />
+                    )}
 
                 </Box>
 

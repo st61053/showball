@@ -7,7 +7,8 @@ import { ThunkDispatch } from "redux-thunk";
 import { GlobalState } from "../../global";
 
 // Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper as Swip, SwiperSlide } from "swiper/react";
+import { Swiper} from 'swiper';
 
 // Import Swiper styles
 import "swiper/css";
@@ -15,13 +16,19 @@ import "swiper/css/navigation";
 // import required modules
 import { Navigation } from "swiper";
 import { changeSelectedToken } from "../actions";
+import { useEffect, useState } from "react";
 
 const TokenSwiper = () => {
 
     const SELECTED_TOKEN = useSelector((state: GlobalState) => state.tokens.selectedToken);
     const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
+    const [swiperRef, setSwiperRef] = useState<Swiper>();
 
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+
+    useEffect(() => {
+        swiperRef?.slideTo(SELECTED_TOKEN?.id ?? 0, 0);
+    }, [SELECTED_TOKEN, swiperRef])
 
     return (
         <Box
@@ -31,8 +38,9 @@ const TokenSwiper = () => {
             }}
         >
             {
-            TOKENS &&
-                <Swiper
+                TOKENS && 
+                <Swip
+                    onSwiper={setSwiperRef}
                     initialSlide={SELECTED_TOKEN?.id || 0}
                     navigation={true}
                     modules={[Navigation]}
@@ -48,11 +56,11 @@ const TokenSwiper = () => {
                                 justifyContent: "center",
                             }}
                         >
-                            <Token img={token.img} width={250}/>
+                            <Token token={token} width={250} />
                         </SwiperSlide>
 
                     )}
-                </Swiper>
+                </Swip>
             }
 
         </Box>

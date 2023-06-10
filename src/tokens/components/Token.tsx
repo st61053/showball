@@ -1,9 +1,9 @@
 import { Card } from "@mui/material";
-import { useSelector } from "react-redux";
-import { GlobalState } from "../../global";
+import { IToken } from "../types";
 
-const Token = ({img, width} : {img: string, width: number}) => {
+const Token = ({ token, width }: { token: IToken, width: number }) => {
     return (
+
         <Card
             sx={{
                 width: width,
@@ -14,7 +14,8 @@ const Token = ({img, width} : {img: string, width: number}) => {
                 alignItems: "center",
             }}
         >
-            <img src={img} alt="kozel" width={"70%"} height={"70%"}></img>
+            <img src={token.img} alt="kozel" width={"70%"} height={"70%"}></img>
+
         </Card>
     );
 }
