@@ -6,4 +6,5 @@ export interface IPlayerState {
 export interface IPlayer {
     id: number;
     name: string;
+    img: string;
 }

@@ -2,40 +2,69 @@ import { Avatar, Box, Card, Typography, useTheme } from "@mui/material";
 import { GlobalState } from "../../global";
 import { useSelector } from "react-redux";
 import Token from "../../tokens/components/Token";
+import { border, borderRadius } from "@mui/system";
+import { PLAYERS } from "../constants";
+import Stat from "./Stat";
+
+// resource images
+import fire from "../../images/resources/fire.png";
+import coin from "../../images/resources/coin.png";
+import straight from "../../images/resources/straight.png";
+import ranking from "../../images/resources/ranking.png";
 
 const Stats = () => {
     const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
     const theme = useTheme();
-    const avatarCount = TOKENS?.length || 0;
+    const avatarCount = 5 || 0;
 
     const renderAvatars = () => {
-        const angle = 360 / avatarCount;
-        const radius = 125; // Adjust the radius of the circle
+        const angle = 130 / avatarCount;
+        const radius = 175; // Adjust the radius of the circle
 
-        const avatars = [];
+        type StatListType = {
+            [key: number]: JSX.Element;
+        };
 
-        for (let i = 0; i < avatarCount; i++) {
-            const rotation = angle * i + 270;
-            const style = {
-                transform: `rotateZ(${rotation}deg) translate(${radius}px) rotateZ(${-rotation}deg)`,
-            };
 
-            avatars.push(
-                <Box
-                    key={i}
-                    sx={{
-                        position: 'absolute',
-                        top: 'calc(50% + 20px)',
-                        left: 'calc(50% - 20px)',
-                        // transform: 'translate(-50%, -50%)',
-                        // backgroundColor: theme.palette.background.default
-                    }}
 
-                    style={style}
-                >{TOKENS && <Token token={TOKENS[i]} width={40} />}</Box>
-            );
+        const STAT_LIST: StatListType = {
+            0: <Stat count={3} img={fire}/>,
+            1: <Stat count={6} img={straight}/>,
+            2: <Stat count={4} img={ranking}/>,
+            3: <Stat count={3} img={fire}/>,
+            4: <Stat count={55} img={coin}/>,
         }
 
+        const avatars = Object.keys(STAT_LIST).reduce((prev, stat, index) => {
+            const ROTATION = angle * index + 220;
+            const STYLE = {
+                transform: `rotateZ(${ROTATION}deg) translate(${radius}px) rotateZ(${-ROTATION}deg)`,
+            };
+
+            prev[index] = (
+                <Card
+                    key={index}
+                    sx={{
+                        position: 'absolute',
+                        top: 'calc(50% + 25px)',
+                        left: 'calc(50% - 25px)',
+                        // transform: 'translate(-50%, -50%)',
+                        outline: `2px solid ${theme.palette.primary.main}`,
+                        borderRadius: "50%",
+                        width: 50,
+                        height: 50,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}
+
+                    style={STYLE}
+                >
+                    {STAT_LIST[index]}
+                </Card>
+            );
+            return prev;
+        }, [] as any);
         return avatars;
     };
 
@@ -73,10 +102,13 @@ const Stats = () => {
                     alignItems: "center"
                 }}
                 >
-                    {TOKENS && <img src={TOKENS[4]?.img} alt="kozel" width={"70%"} height={"70%"}></img>}
+                    {TOKENS && <img src={PLAYERS[0].img} alt="kozel" width={"100%"} height={"100%"}></img>}
                 </Card>
                 {renderAvatars()}
             </Box>
+
+
+
             <Typography
                 variant="h5"
                 textTransform={"capitalize"}

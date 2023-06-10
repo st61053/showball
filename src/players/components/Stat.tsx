@@ -1,18 +1,16 @@
 import { Box, Typography } from "@mui/material";
-import coin from "../../images/resources/coin.png";
 
-const Coin = ({ count, flexDirection = "row" }: { count: number, flexDirection?: string }) => {
+const Stat = ({ count, img }: { count: number, img: string }) => {
     return (
         <Box
             sx={{
                 display: "flex",
                 alignItems: "center",
-                flexDirection: flexDirection,
-                gap: flexDirection === "row" ? 0.5 : 0
+                flexDirection: "column",
             }}
         >
             <Typography
-                variant="subtitle2"
+                variant="subtitle1"
                 textTransform={"capitalize"}
                 sx={{
                     fontWeight: "bold",
@@ -28,10 +26,10 @@ const Coin = ({ count, flexDirection = "row" }: { count: number, flexDirection?:
                     height: 18
                 }}
             >
-                <img src={coin} alt="coin" width={"100%"} height={"100%"}></img>
+                <img src={img} alt={img} width={"100%"} height={"100%"}></img>
             </Box>
         </Box>
     );
 }
 
-export default Coin;
+export default Stat;

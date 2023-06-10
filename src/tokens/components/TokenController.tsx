@@ -21,7 +21,7 @@ const TokenController = () => {
         >
 
 
-            <Box sx={{width: "100%", p: 2, flex: 0.}}>
+            <Box sx={{ width: "100%", p: 2, flex: 0. }}>
                 <Card
                     sx={{
                         display: "flex",
@@ -66,12 +66,14 @@ const TokenController = () => {
             <Box
                 sx={{
                     marginTop: "auto",
-                    pb: 12
+                    pb: 12,
+                    width: "92%",
                 }}
             >
                 <Button
                     variant="contained"
-                    sx={{ width: 250, pt: 2, pb: 2 }}
+                    sx={{ width: "100%", pt: 2, pb: 2, }}
+                    disabled={!Boolean(SELECTED_TOKEN)}
                 >
 
                     <Typography>
