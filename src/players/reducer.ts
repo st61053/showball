@@ -1,9 +1,23 @@
 import { AppAction } from "../global";
 import { COUNTER } from "./constants";
-import { IPlayerState } from "./types";
+import { IPlayer, IPlayerState } from "./types";
+import matej from "../images/players/matej_v2.png";
+
+
+const LOGIN_PLAER : IPlayer = {
+  id: 0,
+  name: "Matěj",
+  img: matej,
+  stats: {
+    points: 72,
+    coins: 55,
+    strike: 5,
+  }
+}
 
 const defaultState: IPlayerState = {
     players: [],
+    loginPlayer: LOGIN_PLAER,
     test: 0
   };
 

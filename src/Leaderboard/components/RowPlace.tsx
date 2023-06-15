@@ -1,6 +1,9 @@
 import { Box, Typography } from "@mui/material";
+import { IMAGES_RESOURCES } from "../../tokens/constants";
+import StatItem from "../../players/components/StatItem";
 
 const RowPlace = ({ place }: { place: number }) => {
+    const { logo } = IMAGES_RESOURCES;
     return (
         <Box
             sx={{
@@ -29,16 +32,13 @@ const RowPlace = ({ place }: { place: number }) => {
                 {`Player`}
             </Typography>
 
-            <Typography
-                variant="subtitle1"
-                textTransform={"capitalize"}
+            <Box
                 sx={{
-                    fontWeight: "bold",
                     marginLeft: "auto"
                 }}
             >
-                {`55`}
-            </Typography>
+                <StatItem count={55} img={logo} />
+            </Box>
         </Box>
     );
 }

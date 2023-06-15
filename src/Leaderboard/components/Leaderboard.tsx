@@ -1,8 +1,13 @@
 import { Box, Card, Divider } from "@mui/material";
 import TopPlace from "./TopPlace";
 import RowPlace from "./RowPlace";
+import { useSelector } from "react-redux";
+import { GlobalState } from "../../global";
 
 const Leaderboard = () => {
+
+    const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
+    
     return (
         <Box
             sx={{
@@ -25,9 +30,9 @@ const Leaderboard = () => {
                         justifyContent: "space-between",
                     }}
                 >
-                    <TopPlace width={90} />
-                    <TopPlace width={115} />
-                    <TopPlace width={90} />
+                    <TopPlace width={90} player={LOGIN_PLAYER}/>
+                    <TopPlace width={115} player={LOGIN_PLAYER} />
+                    <TopPlace width={90} player={LOGIN_PLAYER}/>
 
                 </Box>
                 <Divider />

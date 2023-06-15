@@ -11,8 +11,10 @@ import kanon from "../images/tokens/kanon-500.png";
 import ctyrlistek from "../images/tokens/ctyrlistek-500.png";
 import moucha from "../images/tokens/moucha-500.png";
 
-
-
+import fire from "../images/resources/fire.png";
+import coin from "../images/resources/coin.png";
+import logo from "../images/resources/logo_v2.png";
+import straight from "../images/resources/straight.png";
 
 const PLUGIN = "TOKENS";
 
@@ -32,3 +34,11 @@ export const TOKENS: IToken[] = [
   { id: 9, name: "moucha", img: moucha },
 
 ];
+
+
+export const IMAGES_RESOURCES = {
+  fire: fire,
+  coin: coin,
+  logo: logo,
+  straight: straight
+}

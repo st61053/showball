@@ -1,12 +1,13 @@
 import { Box, Typography } from "@mui/material";
 
-const Stat = ({ count, img }: { count: number, img: string }) => {
+const StatItem = ({ count, img, flexDirection = "row" }: { count: number, img : string, flexDirection?: string }) => {
     return (
         <Box
             sx={{
                 display: "flex",
                 alignItems: "center",
-                flexDirection: "column",
+                flexDirection: flexDirection,
+                gap: flexDirection === "row" ? 0.5 : 0
             }}
         >
             <Typography
@@ -32,4 +33,4 @@ const Stat = ({ count, img }: { count: number, img: string }) => {
     );
 }
 
-export default Stat;
+export default StatItem;

@@ -1,13 +1,15 @@
-import { Avatar, Box, Button, Card, Divider, Grid, Typography } from "@mui/material";
+import { Box, Button, Card, Divider, Grid, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { GlobalState } from "../../global";
 import StoreItem from "./StoreItem";
 
 import Coin from "./Coin";
+import ProfileImage from "../../players/components/ProfileImage";
 
 const Store = () => {
     const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
     const SELECTED_TOKEN = useSelector((state: GlobalState) => state.store.selectedToken);
+    const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
 
     return (
         <Box
@@ -40,13 +42,15 @@ const Store = () => {
                                 gap: 2
                             }}
                         >
-                            <Avatar sx={{
-                                ml: 1,
-                                width: 50,
-                                height: 50,
-                            }}
 
-                            >P</Avatar>
+                            <Box
+                                sx={{
+                                    ml: 1
+                                }}
+                            >
+                                <ProfileImage img={LOGIN_PLAYER.img} width={50} />
+                            </Box>
+
                             <Typography
                                 variant="subtitle1"
                                 textTransform={"capitalize"}
@@ -54,12 +58,12 @@ const Store = () => {
                                     fontWeight: "bold",
                                 }}
                             >
-                                {"Player"}
+                                {LOGIN_PLAYER.name}
                             </Typography>
                             <Box
-                            sx={{marginLeft: "auto", mr: 1}}
+                                sx={{ marginLeft: "auto", mr: 1 }}
                             >
-                                <Coin count={120} />
+                                <Coin count={LOGIN_PLAYER.stats.coins} />
                             </Box>
 
                         </Card>
