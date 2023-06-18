@@ -1,26 +1,29 @@
 import { Box, Button, Typography } from '@mui/material';
 import React, { useState } from 'react'
 import { Wheel } from 'react-custom-roulette'
-import { IMAGES_RESOURCES, TOKENS } from '../../tokens/constants';
+import { IMAGES_RESOURCES, TOKENS, WHEEL_PRIZES } from '../../tokens/constants';
 import StatItem from '../../players/components/StatItem';
 
 const CustomWheel = () => {
 
     const { logo } = IMAGES_RESOURCES;
 
+    const { low, medium, hight, huge, secret } = WHEEL_PRIZES;
+
     const data = [
-        { option: '100', style: { backgroundColor: "#1976d2", textColor: 'white' } },
-        { option: '1', image: { uri: TOKENS[1].img, offsetX: 0, offsetY: 150, sizeMultiplier: 0.5 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
-        { option: '200', style: { backgroundColor: "#1976d2", textColor: 'white' } },
-        { option: '3', image: { uri: TOKENS[3].img, offsetX: 0, offsetY: 150, sizeMultiplier: 0.5 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
-        { option: '300', style: { backgroundColor: "#1976d2", textColor: 'white' } },
-        { option: '5', image: { uri: TOKENS[5].img, offsetX: 0, offsetY: 150, sizeMultiplier: 0.5 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
-        { option: '400', style: { backgroundColor: "#1976d2", textColor: 'white' } },
-        { option: '7', image: { uri: TOKENS[7].img, offsetX: 0, offsetY: 150, sizeMultiplier: 0.5 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
-        { option: '500', style: { backgroundColor: "#1976d2", textColor: 'white' } },
-        { option: '9', image: { uri: TOKENS[9].img, offsetX: 0, offsetY: 150, sizeMultiplier: 0.5 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
-        { option: '600', style: { backgroundColor: "#1976d2", textColor: 'white' } },
-        { option: '11', image: { uri: logo, offsetX: 0, offsetY: 150, sizeMultiplier: 0.5 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'medium', image: { uri: medium, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'low', image: { uri: low, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'hight', image: { uri: hight, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'huge', image: { uri: huge, offsetX: 0, offsetY: 200, sizeMultiplier: 0.8 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'medium', image: { uri: medium, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'low', image: { uri: low, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'hight', image: { uri: hight, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'low', image: { uri: low, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'medium', image: { uri: medium, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'secret', image: { uri: secret, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+        { option: 'low', image: { uri: low, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#FFFFFF", textColor: 'black' } },
+
+
     ]
 
     const [mustSpin, setMustSpin] = useState(false);

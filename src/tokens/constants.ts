@@ -13,8 +13,14 @@ import moucha from "../images/tokens/moucha-500.png";
 
 import fire from "../images/resources/fire.png";
 import coin from "../images/resources/coin.png";
-import logo from "../images/resources/logo_v2.png";
+import logo from "../images/resources/logo_v3.png";
 import straight from "../images/resources/straight.png";
+
+import low from "../images/resources/wheel_low.png";
+import medium from "../images/resources/wheel_medium.png";
+import hight from "../images/resources/wheel_hight.png";
+import huge from "../images/resources/wheel_huge.png";
+import secret from "../images/resources/wheel_secret.png";
 
 const PLUGIN = "TOKENS";
 
@@ -41,4 +47,12 @@ export const IMAGES_RESOURCES = {
   coin: coin,
   logo: logo,
   straight: straight
+}
+
+export const WHEEL_PRIZES = {
+low: low,
+medium: medium,
+hight: hight,
+huge: huge,
+secret: secret
 }

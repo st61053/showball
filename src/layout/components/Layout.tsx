@@ -15,6 +15,7 @@ import Store from "../../store/components/Store";
 import Profile from "../../players/components/Profile";
 import CustomWheel from "../../wheel/components/CustomWheel";
 import PlayerLoginForm from "../../players/components/PlayerLoginForm";
+import Test from "../../players/components/Test";
 
 const Layout = () => {
     return (
@@ -22,7 +23,7 @@ const Layout = () => {
             pagination
             modules={[Pagination]}
             // className="mySwiper"
-            initialSlide={1}
+            initialSlide={2}
         >
             <SwiperSlide><PlayerLoginForm /></SwiperSlide>
             <SwiperSlide><Leaderboard /></SwiperSlide>

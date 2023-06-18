@@ -4,6 +4,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import React from "react";
 
+
 const PlayerLoginForm = () => {
     const { logo } = IMAGES_RESOURCES;
 
@@ -38,6 +39,7 @@ const PlayerLoginForm = () => {
                             gap: 2
                         }}
                     >
+
                         <img src={logo} alt={logo} width={"60%"} height={"60%"}></img>
 
                         <Box
