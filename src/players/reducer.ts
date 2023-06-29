@@ -5,6 +5,7 @@ import { IPlayer, IPlayerState } from "./types";
 export const DEFAULT_PLAYER : IPlayer = {
   id: "",
   name: "",
+  title: "",
   stats: {
     points: 0,
     coins: 0,

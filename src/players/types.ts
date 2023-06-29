@@ -7,6 +7,7 @@ export interface IPlayerState {
 export interface IPlayer {
     id: string;
     name: string;
+    title: string;
     stats : IStats;
     tokens: IPlayerToken[];
 }

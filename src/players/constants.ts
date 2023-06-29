@@ -34,6 +34,7 @@ export const CUSTOM_PLAYER_STATS : IStats = {
 export const CUSTOM_PLAYER: IPlayer = {
   id: "matej",
   name: "Matěj",
+  title: "Král netopýrů",
   stats: CUSTOM_PLAYER_STATS,
   tokens: CUSTOM_PLAYER_TOKENS
 };

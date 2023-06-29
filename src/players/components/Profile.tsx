@@ -200,13 +200,12 @@ const Profile = () => {
                     {/* Player Title */}
                     <Typography
                         variant="caption"
-                        textTransform={"capitalize"}
                         sx={{
                             fontWeight: "bold",
                             color: theme.palette.grey[500]
                         }}
                     >
-                        {"Král netopýrů"}
+                        {LOGIN_PLAYER.title}
                     </Typography>
                 </Card>
 
