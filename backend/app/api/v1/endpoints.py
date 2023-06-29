@@ -213,8 +213,6 @@ async def show_token(
     if not player_token["straight"]:
         player_token["straight"] = True
 
-    print(player_token["straight"])
-
     player = process_straight(player, tokens.get_list())
 
     player_token["count"] += 1
