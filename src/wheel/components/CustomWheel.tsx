@@ -1,11 +1,15 @@
 import { Box, Button, Typography } from '@mui/material';
 import React, { useState } from 'react'
 import { Wheel } from 'react-custom-roulette'
-import { IMAGES_RESOURCES, TOKENS, WHEEL_PRIZES } from '../../tokens/constants';
+import { IMAGES_RESOURCES, WHEEL_PRIZES } from '../../tokens/constants';
 import StatItem from '../../players/components/StatItem';
+import { useDispatch } from 'react-redux';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { addCoin } from '../../players/actions';
 
 const CustomWheel = () => {
-
+    const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
     const { coin } = IMAGES_RESOURCES;
 
     const { low, medium, hight, huge, secret } = WHEEL_PRIZES;
@@ -75,6 +79,7 @@ const CustomWheel = () => {
                     onStopSpinning={() => {
                         setMustSpin(false);
                         setSpin(true);
+                        dispatch(addCoin(WIN_LIST[data[prizeNumber].option]))
                     }}
                     pointerProps={{}}
                 />

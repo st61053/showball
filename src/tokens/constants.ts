@@ -27,32 +27,107 @@ const PLUGIN = "TOKENS";
 export const CHANGE_SELECTED_TOKEN = `${PLUGIN}_change_selected_token`;
 export const LOAD_TOKENS = `${PLUGIN}_load_tokens`;
 
-export const TOKENS: IToken[] = [
-  { id: 0, name: "slimák", img: slimak },
-  { id: 1, name: "krtek", img: krtek },
-  { id: 2, name: "mozek", img: mozek },
-  { id: 3, name: "laso", img: laso },
-  { id: 4, name: "slon", img: slon },
-  { id: 5, name: "netopýr", img: netopyr },
-  { id: 6, name: "kozel", img: kozel },
-  { id: 7, name: "kanón", img: kanon },
-  { id: 8, name: "čtyřlístek", img: ctyrlistek },
-  { id: 9, name: "moucha", img: moucha },
+export type IKeyImage = {
+  [key: string]: string;
+};
 
+export const TOKENS_IMAGE_LIST: IKeyImage = {
+  slimak: slimak,
+  krtek: krtek,
+  mozek: mozek,
+  laso: laso,
+  slon: slon,
+  netopyr: netopyr,
+  kozel: kozel,
+  kanon: kanon,
+  ctyrlistek: ctyrlistek,
+  moucha: moucha,
+};
+
+export const CUSTOM_TOKENS: IToken[] = [
+  {
+    id: "slimak",
+    name: "slimák",
+    points: 1,
+    coins: 1,
+    upgradeCost: { 0: 5, 1: 10, 2: 15, 3: 20 },
+  },
+  {
+    id: "krtek",
+    name: "krtek",
+    points: 1,
+    coins: 1,
+    upgradeCost: { 0: 5, 1: 10, 2: 15, 3: 20 },
+  },
+  {
+    id: "mozek",
+    name: "mozek",
+    points: 1,
+    coins: 1,
+    upgradeCost: { 0: 5, 1: 10, 2: 15, 3: 20 },
+  },
+  {
+    id: "laso",
+    name: "laso",
+    points: 1,
+    coins: 1,
+    upgradeCost: { 0: 5, 1: 10, 2: 15, 3: 20 },
+  },
+  {
+    id: "slon",
+    name: "slon",
+    points: 1,
+    coins: 1,
+    upgradeCost: { 0: 5, 1: 10, 2: 15, 3: 20 },
+  },
+  {
+    id: "netopyr",
+    name: "netopýr",
+    points: 1,
+    coins: 1,
+    upgradeCost: { 0: 5, 1: 10, 2: 15, 3: 20 },
+  },
+  {
+    id: "kozel",
+    name: "kozel",
+    points: 1,
+    coins: 1,
+    upgradeCost: { 0: 5, 1: 10, 2: 15, 3: 20 },
+  },
+  {
+    id: "kanon",
+    name: "kanon",
+    points: 1,
+    coins: 1,
+    upgradeCost: { 0: 5, 1: 10, 2: 15, 3: 20 },
+  },
+  {
+    id: "ctyrlistek",
+    name: "ctyrlistek",
+    points: 1,
+    coins: 1,
+    upgradeCost: { 0: 5, 1: 10, 2: 15, 3: 20 },
+  },
+  {
+    id: "moucha",
+    name: "moucha",
+    points: 1,
+    coins: 1,
+    upgradeCost: { 0: 5, 1: 10, 2: 15, 3: 20 },
+  },
 ];
-
 
 export const IMAGES_RESOURCES = {
   fire: fire,
   coin: coin,
   logo: logo,
-  straight: straight
-}
+  straight: straight,
+};
 
 export const WHEEL_PRIZES = {
-low: low,
-medium: medium,
-hight: hight,
-huge: huge,
-secret: secret
-}
+  low: low,
+  medium: medium,
+  hight: hight,
+  huge: huge,
+  secret: secret,
+};

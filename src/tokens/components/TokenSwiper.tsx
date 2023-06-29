@@ -8,7 +8,7 @@ import { GlobalState } from "../../global";
 
 // Import Swiper React components
 import { Swiper as Swip, SwiperSlide } from "swiper/react";
-import { Swiper} from 'swiper';
+import { Swiper } from 'swiper';
 
 // Import Swiper styles
 import "swiper/css";
@@ -19,7 +19,7 @@ import { changeSelectedToken } from "../actions";
 import { useEffect, useState } from "react";
 
 const TokenSwiper = () => {
-
+    
     const SELECTED_TOKEN = useSelector((state: GlobalState) => state.tokens.selectedToken);
     const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
     const [swiperRef, setSwiperRef] = useState<Swiper>();
@@ -27,8 +27,8 @@ const TokenSwiper = () => {
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
 
     useEffect(() => {
-        swiperRef?.slideTo(SELECTED_TOKEN?.id ?? 0, 0);
-    }, [SELECTED_TOKEN, swiperRef])
+        swiperRef?.slideTo(TOKENS?.findIndex((token) => token.id === SELECTED_TOKEN?.id) ?? 0, 0);
+    }, [TOKENS, SELECTED_TOKEN, swiperRef])
 
     return (
         <Box
@@ -38,10 +38,10 @@ const TokenSwiper = () => {
             }}
         >
             {
-                TOKENS && 
+                TOKENS &&
                 <Swip
                     onSwiper={setSwiperRef}
-                    initialSlide={SELECTED_TOKEN?.id || 0}
+                    initialSlide={TOKENS?.findIndex((token) => token.id === SELECTED_TOKEN?.id) || 0}
                     navigation={true}
                     modules={[Navigation]}
                     slidesPerView={1}
@@ -56,7 +56,7 @@ const TokenSwiper = () => {
                                 justifyContent: "center",
                             }}
                         >
-                            <Token token={token} width={250} />
+                                <Token token={token} width={250} />
                         </SwiperSlide>
 
                     )}

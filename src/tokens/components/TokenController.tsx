@@ -1,13 +1,18 @@
 import { Box, Button, Card, Typography } from "@mui/material";
 import TokenSwiper from "./TokenSwiper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GlobalState } from "../../global";
 import TokenCounter from "./TokenCounter";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
+import { addToken } from "../../players/actions";
 
 
 const TokenController = () => {
     const SELECTED_TOKEN = useSelector((state: GlobalState) => state.tokens.selectedToken);
-    const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
+    const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
+    const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+
     return (
         <Box
             sx={{
@@ -30,7 +35,7 @@ const TokenController = () => {
                         justifyContent: "space-between"
                     }}
                 >
-                    {TOKENS?.map((token, index) =>
+                    {LOGIN_PLAYER.tokens?.map((token, index) =>
                         <TokenCounter token={token} key={index} />
                     )}
 
@@ -70,16 +75,17 @@ const TokenController = () => {
                     width: "92%",
                 }}
             >
-                <Button
+                {SELECTED_TOKEN && <Button
                     variant="contained"
                     sx={{ width: "100%", pt: 2, pb: 2, }}
                     disabled={!Boolean(SELECTED_TOKEN)}
+                    onClick={() => dispatch(addToken(SELECTED_TOKEN))}
                 >
 
                     <Typography>
                         Přidat
                     </Typography>
-                </Button>
+                </Button>}
             </Box>
 
         </Box>

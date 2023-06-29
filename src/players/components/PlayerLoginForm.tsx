@@ -1,13 +1,22 @@
-import { Box, Button, Card, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from "@mui/material";
+import { Box, Button, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from "@mui/material";
 import { IMAGES_RESOURCES } from "../../tokens/constants";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { loginPlayer } from "../actions";
+import { CUSTOM_PLAYER } from "../constants";
+import { GlobalState } from "../../global";
+import { Navigate } from "react-router-dom";
 
 
 const PlayerLoginForm = () => {
-    const { logo } = IMAGES_RESOURCES;
+    const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+    const IS_LOGGED_IN = useSelector((state: GlobalState) => state.players.isLoggedIn);
 
+    const { logo } = IMAGES_RESOURCES;
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -16,6 +25,11 @@ const PlayerLoginForm = () => {
         event.preventDefault();
     };
 
+    const handleLogIn = () => {
+        dispatch(loginPlayer(CUSTOM_PLAYER));
+
+    }
+
     return (
         <Box
             sx={{
@@ -23,12 +37,16 @@ const PlayerLoginForm = () => {
                 height: '100%',
                 width: "100%",
                 flexDirection: "column",
-                alignItems: "center"
+                alignItems: "center",
+                backgroundColor: "#ffffff"
             }}
         >
-            <Grid container sx={{ p: 2 }}>
+            {IS_LOGGED_IN && (
+                <Navigate to="/" replace={true} />
+            )}
+            <Grid container >
                 <Grid item xs={12}>
-                    <Card
+                    <Box
                         sx={{
                             display: "flex",
                             alignItems: "center",
@@ -36,7 +54,7 @@ const PlayerLoginForm = () => {
                             flexDirection: "column",
                             width: "100%",
                             padding: "3em 0",
-                            gap: 2
+                            gap: 4,
                         }}
                     >
 
@@ -48,7 +66,7 @@ const PlayerLoginForm = () => {
                                 flexDirection: "column",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                width: "93%",
+                                width: "83%",
                                 p: 2,
                                 gap: 1.5
                             }}
@@ -79,6 +97,7 @@ const PlayerLoginForm = () => {
                             <Button
                                 variant="contained"
                                 sx={{ width: "100%", p: 2 }}
+                                onClick={handleLogIn}
                             >
 
                                 <Typography>
@@ -86,7 +105,7 @@ const PlayerLoginForm = () => {
                                 </Typography>
                             </Button>
                         </Box>
-                    </Card>
+                    </Box>
                 </Grid>
             </Grid>
         </Box>

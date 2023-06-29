@@ -3,9 +3,14 @@ export interface ITokenState {
     tokens?: IToken[]
 }
 
-
 export interface IToken {
-    id: number,
+    id: string,
     name: string,
-    img: string
+    points: number,
+    coins: number,
+    upgradeCost: ITokenUpgradeCost,
+}
+
+export interface ITokenUpgradeCost {
+    [key: number]: number,
 }

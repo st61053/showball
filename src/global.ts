@@ -1,4 +1,4 @@
-import { IPlayerState } from "./players/types";
+import { IPlayer, IPlayerState } from "./players/types";
 import { IStoreState } from "./store/types";
 import { IToken, ITokenState } from "./tokens/types";
 
@@ -10,6 +10,7 @@ interface GlobalState {
 
 interface AppState {
   type: string;
+  count: number;
   // tokens
   token: IToken;
 }
@@ -19,6 +20,11 @@ interface AppAction {
   // tokens
   token?: IToken;
   tokens?: IToken[];
+  // players
+  player?: IPlayer;
+  players?: IPlayer[];
+  // resources
+  count?: number;
 }
 
 export type { GlobalState, AppAction, AppState };

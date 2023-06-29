@@ -3,7 +3,7 @@ import { CHANGE_SELECTED_TOKEN } from "./constants";
 import { IStoreState } from "./types";
 
 const defaultState: IStoreState = {
-  selectedToken: undefined,
+  selectedToken: null,
 };
 
 export const storeReducer = (

@@ -7,7 +7,7 @@ import { loadOutModesUpdater } from "tsparticles-updater-out-modes";
 import { loadImageShape } from "tsparticles-shape-image";
 import Particles from "react-tsparticles";
 import { ImageEngine } from "tsparticles-shape-image/types/types";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Container } from "tsparticles-engine";
 
 import { Box, Card, Typography, useTheme } from "@mui/material";
@@ -16,14 +16,11 @@ import { useSelector } from "react-redux";
 import { GlobalState } from "../../global";
 import ProfileImage from "./ProfileImage";
 
-import { IMAGES_RESOURCES } from "../../tokens/constants";
-import { TOKENS } from "../../tokens/constants";
-
-
+import { IMAGES_RESOURCES, TOKENS_IMAGE_LIST } from "../../tokens/constants";
+import { Navigate } from "react-router-dom";
+import { PLAYER_IMAGE_LIST } from "../constants";
 
 const Profile = () => {
-
-
 
     const particlesInit = useCallback(async (engine: ImageEngine) => {
         await loadColorUpdater(engine);
@@ -40,8 +37,20 @@ const Profile = () => {
     }, []);
 
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
+    const IS_LOGGED_IN = useSelector((state: GlobalState) => state.players.isLoggedIn);
+    const [TOKEN_PARTICLES, setTokenParticles] = useState([]);
 
-    const { points, coins, strike } = LOGIN_PLAYER.stats;
+    useEffect(() => {
+        setTokenParticles(
+            LOGIN_PLAYER.tokens.reduce((prev, token, index) => {
+                for (let i = 0; i < token.count; i++) {
+                    prev.push({ src: TOKENS_IMAGE_LIST[token.tokenId] })
+                }
+                return prev;
+            }, [] as any)
+        );
+    }, [LOGIN_PLAYER.tokens])
+
     const { fire, coin, logo, straight } = IMAGES_RESOURCES;
 
     const theme = useTheme();
@@ -56,10 +65,12 @@ const Profile = () => {
         };
 
         const STAT_LIST: StatListType = {
-            0: <StatItem flexDirection="column" count={strike} img={fire} />,
-            1: <StatItem flexDirection="column" count={6} img={straight} />,
-            2: <StatItem flexDirection="column" count={points} img={logo} />,
-            3: <StatItem flexDirection="column" count={coins} img={coin} />,
+            0: <StatItem flexDirection="column" count={LOGIN_PLAYER?.stats.strike || 0} img={fire} />,
+            1: <StatItem flexDirection="column" count={
+                LOGIN_PLAYER.tokens.reduce((prev, token) => token.straight ? prev + 1 : prev, 0)
+            } img={straight} />,
+            2: <StatItem flexDirection="column" count={LOGIN_PLAYER?.stats.points || 0} img={logo} />,
+            3: <StatItem flexDirection="column" count={LOGIN_PLAYER?.stats.coins || 0} img={coin} />,
         }
 
         const stats = Object.keys(STAT_LIST).reduce((prev, stat, index) => {
@@ -96,10 +107,14 @@ const Profile = () => {
 
     return (
         <>
-            {LOGIN_PLAYER && <Box
+            {!IS_LOGGED_IN && (
+                <Navigate to="/login" replace={true} />
+            )}
+            {LOGIN_PLAYER && TOKEN_PARTICLES && TOKEN_PARTICLES.length > 0 && <Box
                 sx={{
                     position: "absolute",
-                    height: "100%"
+                    height: "100%",
+                    zIndex: -1
                 }}
             >
 
@@ -110,7 +125,7 @@ const Profile = () => {
                         fullScreen: { enable: false },
                         fpsLimit: 120,
                         particles: {
-                            reduceDuplicates: false,
+                            reduceDuplicates: true,
                             color: { value: "#ffffff" },
                             move: {
                                 direction: "none",
@@ -120,21 +135,10 @@ const Profile = () => {
                                 speed: 7,
                                 straight: false
                             },
-                            number: { value: 10 },
+                            number: { value: TOKEN_PARTICLES.length },
                             shape: {
                                 type: "image",
-                                image: [
-                                    { src: TOKENS[0].img },
-                                    { src: TOKENS[1].img },
-                                    { src: TOKENS[2].img },
-                                    { src: TOKENS[3].img },
-                                    { src: TOKENS[4].img },
-                                    { src: TOKENS[5].img },
-                                    { src: TOKENS[6].img },
-                                    { src: TOKENS[7].img },
-                                    { src: TOKENS[8].img },
-                                    { src: TOKENS[9].img },
-                                ]
+                                images: TOKEN_PARTICLES
                             },
                             size: {
                                 value: 30
@@ -143,7 +147,7 @@ const Profile = () => {
                     }} />
             </Box>}
 
-            <Box
+            {LOGIN_PLAYER && <Box
                 sx={{
                     display: 'flex',
                     // justifyContent: 'center',
@@ -166,7 +170,7 @@ const Profile = () => {
                     }}
 
                 >
-                    <ProfileImage img={LOGIN_PLAYER.img} width={250} />
+                    <ProfileImage img={PLAYER_IMAGE_LIST[LOGIN_PLAYER.id]} width={250} />
                     {renderStatItems()}
                 </Box>
 
@@ -190,7 +194,7 @@ const Profile = () => {
                             fontWeight: "bold",
                         }}
                     >
-                        {"Player"}
+                        {LOGIN_PLAYER.name}
                     </Typography>
 
                     {/* Player Title */}
@@ -206,7 +210,7 @@ const Profile = () => {
                     </Typography>
                 </Card>
 
-            </Box></>
+            </Box>}</>
     );
 }
 

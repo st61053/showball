@@ -7,13 +7,13 @@ import { GlobalState } from "../../global";
 const Leaderboard = () => {
 
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
-    
+
     return (
         <Box
             sx={{
                 height: "100%",
                 p: 2
-                
+
             }}
         >
             <Card
@@ -30,9 +30,10 @@ const Leaderboard = () => {
                         justifyContent: "space-between",
                     }}
                 >
-                    <TopPlace width={90} player={LOGIN_PLAYER}/>
-                    <TopPlace width={115} player={LOGIN_PLAYER} />
-                    <TopPlace width={90} player={LOGIN_PLAYER}/>
+                    { LOGIN_PLAYER && <TopPlace width={90} player={LOGIN_PLAYER}/> }
+                    { LOGIN_PLAYER && <TopPlace width={115} player={LOGIN_PLAYER}/> }
+                    { LOGIN_PLAYER && <TopPlace width={90} player={LOGIN_PLAYER}/> }
+
 
                 </Box>
                 <Divider />

@@ -1,21 +1,25 @@
-import { IToken } from "../tokens/types";
-
 export interface IPlayerState {
     players: IPlayer[];
     loginPlayer: IPlayer;
-    test: number;
+    isLoggedIn: boolean;
 }
 
 export interface IPlayer {
-    id: number;
+    id: string;
     name: string;
-    img: string;
-    stats : Stats;
-    straightTokens?: IToken[];
+    stats : IStats;
+    tokens: IPlayerToken[];
 }
 
-export interface Stats {
+export interface IStats {
     points: number;
     coins: number;
     strike: number;
+}
+
+export interface IPlayerToken {
+    tokenId: string;
+    count: number;
+    upgrade: number;
+    straight: boolean;
 }

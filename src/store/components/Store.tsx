@@ -5,6 +5,7 @@ import StoreItem from "./StoreItem";
 
 import Coin from "./Coin";
 import ProfileImage from "../../players/components/ProfileImage";
+import { PLAYER_IMAGE_LIST } from "../../players/constants";
 
 const Store = () => {
     const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
@@ -48,7 +49,7 @@ const Store = () => {
                                     ml: 1
                                 }}
                             >
-                                <ProfileImage img={LOGIN_PLAYER.img} width={50} />
+                                <ProfileImage img={PLAYER_IMAGE_LIST[LOGIN_PLAYER.id]} width={50} />
                             </Box>
 
                             <Typography
@@ -58,12 +59,12 @@ const Store = () => {
                                     fontWeight: "bold",
                                 }}
                             >
-                                {LOGIN_PLAYER.name}
+                                {LOGIN_PLAYER?.name}
                             </Typography>
                             <Box
                                 sx={{ marginLeft: "auto", mr: 1 }}
                             >
-                                <Coin count={LOGIN_PLAYER.stats.coins} />
+                                <Coin count={LOGIN_PLAYER?.stats.coins || 0} />
                             </Box>
 
                         </Card>

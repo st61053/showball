@@ -5,15 +5,17 @@ import { useDispatch } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { changeSelectedToken, loadTokens } from './tokens/actions';
-import { TOKENS } from './tokens/constants';
+import Router from './layout/components/Router';
+import { CUSTOM_TOKENS } from './tokens/constants';
 
 function App() {
   const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
 
   useEffect(() => {
-    dispatch(loadTokens(TOKENS));
-    dispatch(changeSelectedToken(TOKENS[0]));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(loadTokens(CUSTOM_TOKENS));
+    dispatch(changeSelectedToken(CUSTOM_TOKENS[0]));
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -21,7 +23,9 @@ function App() {
       sx={{
         height: "100%",
       }}>
-      <Layout />
+        <Layout >
+          <Router />
+        </Layout>
     </Box>
   );
 }

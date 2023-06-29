@@ -3,6 +3,7 @@ import ProfileImage from "../../players/components/ProfileImage";
 import { IMAGES_RESOURCES } from "../../tokens/constants";
 import { useState } from "react";
 import { Box, Card, Typography } from "@mui/material";
+import { PLAYER_IMAGE_LIST } from "../../players/constants";
 
 const TopPlace = ({ width, player }: { width: number, player: IPlayer }) => {
 
@@ -31,7 +32,9 @@ const TopPlace = ({ width, player }: { width: number, player: IPlayer }) => {
                 }}
                 onClick={() => setFlip((flip) => !flip)}
             >
-                {flip ? <img style={{opacity: 0.8}} src={logo} alt={logo} width={"70%"} height={"70%"}></img> : <ProfileImage img={player.img} width={width} />}
+                {flip 
+                ? <img style={{opacity: 0.8}} src={logo} alt={logo} width={"70%"} height={"70%"}></img> 
+                : <ProfileImage img={PLAYER_IMAGE_LIST[player?.id]} width={width} />}
                 {flip && <Typography
                     variant="h5"
                     sx={{
