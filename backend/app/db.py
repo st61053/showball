@@ -2,7 +2,7 @@ from typing import TypeVar
 
 from pymongo.database import Database
 
-from app.models import Player, Token
+from app.models import Player, Strike, Token
 
 
 class Collection:
@@ -17,6 +17,9 @@ class Players(Collection):
     def __init__(self, db: Database) -> None:
         super().__init__(db)
         self.collection = self.db["players"]
+
+    def get_list(self) -> list[Player]:
+        return list(self.collection.find(projection={"_id": 0}))
 
     def get(self, player_id: str) -> Player | None:
         return self.collection.find_one({"player_id": player_id}, {"_id": 0})
@@ -48,3 +51,12 @@ class Tokens(Collection):
 
     def create(self, token: Token) -> None:
         self.update(token)
+
+
+class Strikes(Collection):
+    def __init__(self, db: Database) -> None:
+        super().__init__(db)
+        self.collection = self.db["strikes"]
+
+    def create(self, strike: Strike) -> None:
+        self.collection.insert_one(strike)

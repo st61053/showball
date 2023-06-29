@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import TypedDict
 
 
@@ -5,6 +6,7 @@ class PlayerStats(TypedDict):
     points: int
     coins: int
     strike: int
+    last_strike: datetime | None
 
 
 class PlayerTokenStats(TypedDict):
@@ -29,9 +31,9 @@ class Token(TypedDict):
     upgrades: dict[int, int]
 
 
-class PlayerStrike(TypedDict):
+class Strike(TypedDict):
     player_id: int
     token_id: int
-    amount: int
     points: int
     coins: int
+    timestamp: datetime

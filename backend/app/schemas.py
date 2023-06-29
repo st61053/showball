@@ -110,3 +110,24 @@ class TokenOutputSchema(BaseModel):
 
 class TokensOutputSchema(BaseModel):
     tokens: list[TokenOutputSchema]
+
+
+class TokenShowSchema(BaseModel):
+    token_id: str
+
+
+class TokenUpgradeSchema(BaseModel):
+    token_id: str
+
+
+class AddCoinsSchema(BaseModel):
+    coins: int = Field(gt=0)
+
+
+class LeaderBoardRowOutputSchema(BaseModel):
+    player_id: str
+    points: int
+
+
+class LeaderBoardOutputSchema(BaseModel):
+    rows: list[LeaderBoardRowOutputSchema]
