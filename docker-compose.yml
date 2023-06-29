@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+
+  sb-backend:
+    build:
+      context: ./backend
+    image: showball-backend
+    container_name: sb-backend
+    depends_on:
+      - sb-mongo
+    volumes:
+      - ./backend/:/app
+    ports:
+      - "8080:8080"
+    networks:
+      - sb-network
+    env_file:
+      - ./backend/.env
+    command: bash -c "poetry run uvicorn --host 0.0.0.0 app.main:app --port 8080 --reload"
+
+  sb-mongo:
+    image: mongo:5.0.17
+    container_name: sb-mongo
+    ports:
+      - 27017:27017
+    networks:
+      - sb-network
+    volumes:
+      - ./mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+
+networks:
+  sb-network:
