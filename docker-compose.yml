@@ -2,6 +2,21 @@ version: '3.8'
 
 services:
 
+  sb-frontend:
+    build:
+      context: ./frontend
+    image: showball-frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+    restart: always
+    networks:
+      - sb-network
+    depends_on:
+      - sb-backend
+    command: bash -c "nmp start"
+
   sb-backend:
     build:
       context: ./backend
