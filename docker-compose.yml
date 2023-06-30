@@ -28,6 +28,7 @@ services:
       - sb-mongo
     volumes:
       - ./backend/:/app
+      - /etc/localtime:/etc/localtime
     ports:
       - "8080:8080"
     networks:
