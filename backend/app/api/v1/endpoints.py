@@ -145,13 +145,13 @@ def process_strike_count(player: Player, set_strike: bool) -> Player:
     last = player_stats["last_strike"]
 
     if last is not None and last < now:
-        if (now - last) > timedelta(days=2):
+        if (now.date() - last.date()) > timedelta(days=2):
             player_stats["strike"] = 0
 
             if set_strike:
                 player_stats["last_strike"] = now
 
-        elif (now - last) > timedelta(days=1) and set_strike:
+        elif (now.date() - last.date()) >= timedelta(days=1) and set_strike:
             player_stats["strike"] += 1
             player_stats["last_strike"] = now
     else:
