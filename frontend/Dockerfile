@@ -1,19 +1,24 @@
-FROM node:18.10-alpine
+FROM node:18.10
 
 # Create app directory
 WORKDIR /app
 
+ENV PATH /app/node_modules/.bin:$PATH
+
 # Copy dependency definitions
-COPY ./package.json ./package-lock.json
+
+COPY package.json ./
+COPY package-lock.json ./
 
 # Install dependecies
 #RUN npm set progress=false \
 #    && npm config set depth 0 \
 #    && npm i install
-RUN npm i
+
+RUN npm install
 
 # Get all the code needed to run the app
-COPY . /.
+COPY . ./
 
 # Expose the port the app runs in
 EXPOSE 3000

@@ -6,16 +6,16 @@ services:
     build:
       context: ./frontend
     image: showball-frontend
+    container_name: sb-frontend
     ports:
       - 3000:3000
     volumes:
       - ./frontend:/app
-    restart: always
+      - ./frontend/app/node_modules
     networks:
       - sb-network
     depends_on:
       - sb-backend
-    command: bash -c "nmp start"
 
   sb-backend:
     build:
