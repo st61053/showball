@@ -1,11 +1,24 @@
 from functools import lru_cache
 from typing import Any
 
-from pydantic import BaseSettings, Field, MongoDsn, validator
+from pydantic import AnyHttpUrl, BaseSettings, Field, MongoDsn, validator
 
 
 class Settings(BaseSettings):
+    # Api
     SECRET_KEY: str
+    BACKEND_CORS_ORIGINS: list[AnyHttpUrl] | str = Field(
+        [], title="Backend cors origins"
+    )
+
+    @validator("BACKEND_CORS_ORIGINS", pre=True)
+    def assemble_cors_origins(cls, v: str | list[str]) -> list[str]:
+        if isinstance(v, str) and not v.startswith("["):
+            return [i.strip() for i in v.split(",")]
+        elif isinstance(v, (list)):
+            return v
+
+        raise ValueError(v)
 
     # Mongo
     MONGO_HOST: str = Field("localhost", title="Mongo database host")

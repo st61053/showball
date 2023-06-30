@@ -23,7 +23,7 @@ STRAIGHT_POINTS = 20
 
 STRIKE_COINS = 1
 STRIKE_POINTS = 1
-SPIN_COST = 3
+SPIN_COST = 5
 
 router = APIRouter()
 
@@ -255,13 +255,15 @@ async def upgrade_token(
 
     player_stats = player["stats"]
 
-    if player_stats["coins"] < token["upgrades"][new_upgrade]:
+    if not create_data.free and player_stats["coins"] < token["upgrades"][new_upgrade]:
         raise HTTPBadRequestError(
             f"Not enought coins for level {new_upgrade} {token['name']} upgrade. Upgrade cost {token['upgrades'][new_upgrade]} but only {player_stats['coins']} is available."
         )
 
     player_token["upgrade"] = upgrade + 1
-    player_stats["coins"] -= token["upgrades"][new_upgrade]
+
+    if not create_data.free:
+        player_stats["coins"] -= token["upgrades"][new_upgrade]
 
     player["tokens"][token["token_id"]] = player_token
     player["stats"] = player_stats

@@ -118,6 +118,7 @@ class TokenShowSchema(BaseModel):
 
 class TokenUpgradeSchema(BaseModel):
     token_id: str
+    free: bool = Field(False)
 
 
 class WheelSpinSchema(BaseModel):
