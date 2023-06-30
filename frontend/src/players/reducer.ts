@@ -1,5 +1,5 @@
 import { AppAction } from "../global";
-import { ADD_COIN, ADD_TOKEN, LOGIN_PLAYER } from "./constants";
+import { ADD_COIN, ADD_TOKEN, CAN_SPIN, LOGIN_PLAYER } from "./constants";
 import { IPlayer, IPlayerState } from "./types";
 
 export const DEFAULT_PLAYER : IPlayer = {
@@ -18,6 +18,7 @@ const defaultState: IPlayerState = {
     players: [],
     loginPlayer: DEFAULT_PLAYER,
     isLoggedIn: false,
+    spin: false,
   };
 
   export const playersReducer = (
@@ -53,6 +54,11 @@ const defaultState: IPlayerState = {
             straight: true
           }) : (token))
         }
+      }
+      case CAN_SPIN: 
+      return {
+        ...state,
+        spin: action.spin
       }
       default:
         return state;

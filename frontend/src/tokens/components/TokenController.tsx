@@ -5,13 +5,35 @@ import { GlobalState } from "../../global";
 import TokenCounter from "./TokenCounter";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
-import { addToken } from "../../players/actions";
+import { addToken, loginPlayer } from "../../players/actions";
 
 
 const TokenController = () => {
     const SELECTED_TOKEN = useSelector((state: GlobalState) => state.tokens.selectedToken);
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
+    const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+
+
+    const showToken = async () => {
+
+        if (localStorage.access_token) {
+            const response = await fetch(`${SEVER_PREFIX}/api/v1/show-token`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                },
+                body: JSON.stringify({token_id: SELECTED_TOKEN?.id})
+            })
+
+            const json = await response.json();
+
+            if (response.ok) {
+                dispatch(loginPlayer(json))
+            }
+        }
+    }
 
     return (
         <Box
@@ -79,7 +101,7 @@ const TokenController = () => {
                     variant="contained"
                     sx={{ width: "100%", pt: 2, pb: 2, }}
                     disabled={!Boolean(SELECTED_TOKEN)}
-                    onClick={() => dispatch(addToken(SELECTED_TOKEN))}
+                    onClick={() => showToken()}
                 >
 
                     <Typography>

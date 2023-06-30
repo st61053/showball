@@ -32,7 +32,7 @@ const StoreItem = ({ token }: { token: IToken }) => {
 
                 {
                     TOKEN.upgrade < 3 
-                    ? <Coin count={token.upgradeCost[TOKEN.upgrade]} /> :
+                    ? <Coin count={token.upgrades[TOKEN.upgrade]} /> :
                         <Typography
                             variant="subtitle2"
                             sx={{

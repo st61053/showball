@@ -17,6 +17,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper";
 import { changeSelectedToken } from "../actions";
 import { useEffect, useState } from "react";
+import { canSpin } from "../../players/actions";
 
 const TokenSwiper = () => {
     
@@ -25,6 +26,13 @@ const TokenSwiper = () => {
     const [swiperRef, setSwiperRef] = useState<Swiper>();
 
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+
+
+    const swipe = (slide: Swiper) => {
+        if (TOKENS) {
+            dispatch(changeSelectedToken(TOKENS[slide.activeIndex]))
+        }
+    }
 
     useEffect(() => {
         swiperRef?.slideTo(TOKENS?.findIndex((token) => token.id === SELECTED_TOKEN?.id) ?? 0, 0);
@@ -46,7 +54,7 @@ const TokenSwiper = () => {
                     modules={[Navigation]}
                     slidesPerView={1}
                     centeredSlides
-                    onSlideChange={(slide) => dispatch(changeSelectedToken(TOKENS[slide.activeIndex]))}
+                    onSlideChange={(slide) => swipe(slide)}
                 >
                     {TOKENS.map((token, index) =>
                         <SwiperSlide

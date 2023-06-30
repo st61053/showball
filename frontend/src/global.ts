@@ -1,4 +1,5 @@
 import { IPlayer, IPlayerState } from "./players/types";
+import { ISettingsState } from "./settings/types";
 import { IStoreState } from "./store/types";
 import { IToken, ITokenState } from "./tokens/types";
 
@@ -6,6 +7,7 @@ interface GlobalState {
   tokens: ITokenState;
   store: IStoreState;
   players: IPlayerState;
+  settings: ISettingsState;
 }
 
 interface AppState {
@@ -23,6 +25,7 @@ interface AppAction {
   // players
   player?: IPlayer;
   players?: IPlayer[];
+  spin?: boolean;
   // resources
   count?: number;
 }

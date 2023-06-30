@@ -12,15 +12,22 @@ import type { Container } from "tsparticles-engine";
 
 import { Box, Card, Typography, useTheme } from "@mui/material";
 import StatItem from "./StatItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GlobalState } from "../../global";
 import ProfileImage from "./ProfileImage";
 
 import { IMAGES_RESOURCES, TOKENS_IMAGE_LIST } from "../../tokens/constants";
 import { Navigate } from "react-router-dom";
 import { PLAYER_IMAGE_LIST } from "../constants";
+import { loginPlayer } from "../actions";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
+import { IPlayer } from "../types";
+import { access } from "fs";
 
 const Profile = () => {
+
+    const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
 
     const particlesInit = useCallback(async (engine: ImageEngine) => {
         await loadColorUpdater(engine);
@@ -37,8 +44,9 @@ const Profile = () => {
     }, []);
 
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
-    const IS_LOGGED_IN = useSelector((state: GlobalState) => state.players.isLoggedIn);
+    const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
     const [TOKEN_PARTICLES, setTokenParticles] = useState([]);
+    const [REDIRECT, setRedirect] = useState(false);
 
     useEffect(() => {
         setTokenParticles(
@@ -50,6 +58,37 @@ const Profile = () => {
             }, [] as any)
         );
     }, [LOGIN_PLAYER.tokens])
+
+    useEffect(() => {
+        const getPlayer = async () => {
+
+            const response = await fetch(`${SEVER_PREFIX}/api/v1/player`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                }
+            })
+
+            const json = await response.json();
+
+            if (response.ok) {
+                dispatch(loginPlayer(json))
+            } else {
+                localStorage.removeItem('access_token');
+                setRedirect(true);
+            }
+        }
+
+        if (localStorage.access_token) {
+            console.log(true);
+            getPlayer();
+        } else {
+            console.log(false);
+            setRedirect(true);  
+        }
+        
+    }, [])
 
     const { fire, coin, logo, straight } = IMAGES_RESOURCES;
 
@@ -107,9 +146,12 @@ const Profile = () => {
 
     return (
         <>
-            {!IS_LOGGED_IN && (
-                <Navigate to="/login" replace={true} />
-            )}
+            {!sessionStorage["access_token"] && REDIRECT &&
+                
+                    <Navigate to="/login" replace={true} />
+                
+
+            }
             {LOGIN_PLAYER && TOKEN_PARTICLES && TOKEN_PARTICLES.length > 0 && <Box
                 sx={{
                     position: "absolute",

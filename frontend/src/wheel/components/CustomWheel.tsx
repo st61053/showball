@@ -3,13 +3,58 @@ import React, { useState } from 'react'
 import { Wheel } from 'react-custom-roulette'
 import { IMAGES_RESOURCES, WHEEL_PRIZES } from '../../tokens/constants';
 import StatItem from '../../players/components/StatItem';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { addCoin } from '../../players/actions';
+import { addCoin, canSpin, loginPlayer } from '../../players/actions';
+import { GlobalState } from '../../global';
 
 const CustomWheel = () => {
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+    const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
+    const CAN_SPIN = useSelector((state: GlobalState) => state.players.spin);
+
+    const getPlayerSpin = async () => {
+
+        if (localStorage.access_token) {
+            const response = await fetch(`${SEVER_PREFIX}/api/v1/can-spin`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                },
+            })
+
+            const json = await response.json();
+
+            if (response.ok) {
+                dispatch(canSpin(json.free_spin))
+            }
+        }
+    }
+
+    const wheelSpin = async () => {
+
+        if (localStorage.access_token) {
+            const response = await fetch(`${SEVER_PREFIX}/api/v1/wheel-spin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                },
+                body: JSON.stringify({ prize: WIN_LIST[data[prizeNumber].option], free: CAN_SPIN })
+            })
+
+            const json = await response.json();
+
+            if (response.ok) {
+                await getPlayerSpin();
+                dispatch(loginPlayer(json))
+            }
+        }
+    }
+
+
     const { coin } = IMAGES_RESOURCES;
 
     const { low, medium, hight, huge, secret } = WHEEL_PRIZES;
@@ -34,7 +79,7 @@ const CustomWheel = () => {
         [key: string]: number
     }
 
-    const WIN_LIST : IWin = {
+    const WIN_LIST: IWin = {
         low: 1,
         medium: 3,
         hight: 5,
@@ -52,6 +97,7 @@ const CustomWheel = () => {
             setPrizeNumber(newPrizeNumber);
             setMustSpin(true);
             setSpin(false);
+            dispatch(addCoin(-3));
         }
     }
 
@@ -79,23 +125,15 @@ const CustomWheel = () => {
                     onStopSpinning={() => {
                         setMustSpin(false);
                         setSpin(true);
-                        dispatch(addCoin(WIN_LIST[data[prizeNumber].option]))
+                        // dispatch(addCoin(WIN_LIST[data[prizeNumber].option]))
+                        wheelSpin();
                     }}
                     pointerProps={{}}
                 />
             </Box>
-            {/* <Snackbar open={spin} autoHideDuration={6000} onClose={() => setSpin(false)}
-                TransitionComponent={Slide}
-            >
-                <Alert onClose={() => setSpin(false)} severity="success" sx={{ width: '100%' }} variant="outlined">
-                    Vyhrál si cenu číslo: {prizeNumber}
-                </Alert>
-
-            </Snackbar> */}
 
             {spin && <Typography
                 variant="h5"
-                // textTransform={"uppercase"}
                 sx={{
                     pt: 4,
                     pb: 1,
@@ -116,13 +154,24 @@ const CustomWheel = () => {
             >
                 <Button
                     variant="contained"
-                    sx={{ width: "100%", pt: 2, pb: 2, }}
+                    sx={{
+                        width: "100%",
+                        pt: 2,
+                        pb: 2,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 1
+                    }}
                     onClick={handleSpinClick}
                 >
 
                     <Typography>
-                        Roztočit
+                        Roztočit!
                     </Typography>
+                    { !CAN_SPIN && <Typography>{`(`}</Typography> }
+                    { !CAN_SPIN && <StatItem count={3} img={coin} /> }
+                    { !CAN_SPIN && <Typography>{`)`}</Typography> }
                 </Button>
             </Box>
         </Box>

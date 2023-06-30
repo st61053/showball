@@ -6,7 +6,7 @@ import { GlobalState } from "../../global";
 
 const Token = ({ token, width }: { token: IToken, width: number }) => {
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
-    const TOKEN = LOGIN_PLAYER.tokens.find((tok) => tok.tokenId === token.id);
+    const TOKEN = LOGIN_PLAYER.tokens.find((tok) => tok.tokenId === token?.id);
 
     type ILevelList = {
         [key: number]: {
@@ -49,7 +49,7 @@ const Token = ({ token, width }: { token: IToken, width: number }) => {
                 
             }}
         >
-            <img src={TOKENS_IMAGE_LIST[token.id]} alt="kozel" width={"70%"} height={"70%"}></img>
+            <img src={TOKENS_IMAGE_LIST[token?.id]} alt="kozel" width={"70%"} height={"70%"}></img>
         </Card>}
         </>
     );

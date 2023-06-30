@@ -2,6 +2,7 @@ export interface IPlayerState {
     players: IPlayer[];
     loginPlayer: IPlayer;
     isLoggedIn: boolean;
+    spin: boolean;
 }
 
 export interface IPlayer {

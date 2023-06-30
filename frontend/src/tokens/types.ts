@@ -6,11 +6,11 @@ export interface ITokenState {
 export interface IToken {
     id: string,
     name: string,
-    points: number,
-    coins: number,
-    upgradeCost: ITokenUpgradeCost,
+    upgrades: ITokenMap,
+    points: ITokenMap,
+    coins: ITokenMap
 }
 
-export interface ITokenUpgradeCost {
+export interface ITokenMap {
     [key: number]: number,
 }

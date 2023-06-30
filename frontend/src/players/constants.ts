@@ -7,9 +7,10 @@ const PLUGIN = "PLAYERS";
 export const LOGIN_PLAYER = `${PLUGIN}_login_player`;
 export const ADD_COIN = `${PLUGIN}_add_coin`;
 export const ADD_TOKEN = `${PLUGIN}_add_token`;
+export const CAN_SPIN = `${PLUGIN}_can_spin`;
 
 export const PLAYER_IMAGE_LIST : IKeyImage = {
-  matej: matej,
+  admin: matej,
 };
 
 export const CUSTOM_PLAYER_TOKENS: IPlayerToken[] = [
