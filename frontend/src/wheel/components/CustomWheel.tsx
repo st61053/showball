@@ -8,11 +8,33 @@ import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { addCoin, canSpin, loginPlayer } from '../../players/actions';
 import { GlobalState } from '../../global';
+import Token from '../../tokens/components/Token';
+import { IPlayerToken } from '../../players/types';
 
 const CustomWheel = () => {
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
     const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
     const CAN_SPIN = useSelector((state: GlobalState) => state.players.spin);
+    const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
+    const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
+
+    const [FREE_UPGRADE_TOKEN_ID, setFreeUpgradeTokenId] = useState<string>("");
+
+    const WHEEL_COST = 3;
+
+    const getFreeUpdateToken = () => {
+        let min = 10;
+
+        LOGIN_PLAYER.tokens.forEach((token) => {
+            if (token.upgrade < min) {
+                min = token.upgrade
+            }
+        })
+
+        const POSIBLE_WIN_TOKENS = LOGIN_PLAYER.tokens.filter((token) => token.upgrade === min);
+
+        setFreeUpgradeTokenId(POSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].tokenId);
+    }
 
     const getPlayerSpin = async () => {
 
@@ -35,23 +57,46 @@ const CustomWheel = () => {
 
     const wheelSpin = async () => {
 
-        if (localStorage.access_token) {
-            const response = await fetch(`${SEVER_PREFIX}/api/v1/wheel-spin`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
-                },
-                body: JSON.stringify({ prize: WIN_LIST[data[prizeNumber].option], free: CAN_SPIN })
-            })
+        await getFreeUpdateToken();
 
-            const json = await response.json();
-
-            if (response.ok) {
-                await getPlayerSpin();
-                dispatch(loginPlayer(json))
+        if (FREE_UPGRADE_TOKEN_ID === "") {
+            if (localStorage.access_token) {
+                const response = await fetch(`${SEVER_PREFIX}/api/v1/wheel-spin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                    },
+                    body: JSON.stringify({ prize: WIN_LIST[data[prizeNumber].option], free: CAN_SPIN })
+                })
+    
+                const json = await response.json();
+    
+                if (response.ok) {
+                    await getPlayerSpin();
+                    dispatch(loginPlayer(json))
+                }
+            }
+        } else {
+            if (localStorage.access_token) {
+                const response = await fetch(`${SEVER_PREFIX}/api/v1/wheel-spin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                    },
+                    body: JSON.stringify({ prize: WIN_LIST[data[prizeNumber].option], free: CAN_SPIN })
+                })
+    
+                const json = await response.json();
+    
+                if (response.ok) {
+                    await getPlayerSpin();
+                    dispatch(loginPlayer(json))
+                }
             }
         }
+
     }
 
 
@@ -97,7 +142,7 @@ const CustomWheel = () => {
             setPrizeNumber(newPrizeNumber);
             setMustSpin(true);
             setSpin(false);
-            dispatch(addCoin(-3));
+            dispatch(addCoin(-WHEEL_COST));
         }
     }
 
@@ -143,7 +188,37 @@ const CustomWheel = () => {
                 Vyhrál jsi:
             </Typography>}
 
-            {spin && <StatItem count={WIN_LIST[data[prizeNumber].option]} img={coin} />}
+            {spin && data[prizeNumber].option !== "secret" && <StatItem count={WIN_LIST[data[prizeNumber].option]} img={coin} />}
+
+            {spin && data[prizeNumber].option === "secret" &&
+
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 1.5
+                    }}
+                >
+                    <Typography
+                        variant="subtitle1"
+                        sx={{
+                            fontWeight: "bold"
+                        }}
+                    >
+                        Free upgrade na
+                    </Typography>
+
+                    {
+                        TOKENS && FREE_UPGRADE_TOKEN_ID !== "" &&
+                        <Token token={TOKENS?.find((tok) => tok.id === FREE_UPGRADE_TOKEN_ID) || TOKENS[0]} width={50} />
+                    }
+
+
+                </Box>
+
+
+            }
 
             <Box
                 sx={{
@@ -164,14 +239,15 @@ const CustomWheel = () => {
                         gap: 1
                     }}
                     onClick={handleSpinClick}
+                    disabled={Boolean(LOGIN_PLAYER.stats.coins < WHEEL_COST && !CAN_SPIN)}
                 >
 
                     <Typography>
                         Roztočit!
                     </Typography>
-                    { !CAN_SPIN && <Typography>{`(`}</Typography> }
-                    { !CAN_SPIN && <StatItem count={3} img={coin} /> }
-                    { !CAN_SPIN && <Typography>{`)`}</Typography> }
+                    {!CAN_SPIN && <Typography>{`(`}</Typography>}
+                    {!CAN_SPIN && <StatItem count={3} img={coin} />}
+                    {!CAN_SPIN && <Typography>{`)`}</Typography>}
                 </Button>
             </Box>
         </Box>
