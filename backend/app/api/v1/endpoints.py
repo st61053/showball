@@ -6,11 +6,11 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.config import Settings, get_settings
 from app.db import Players, Strikes, Tokens
 from app.models import Player, PlayerStats, PlayerTokenStats, Strike, Token
-from app.schemas import (AccessToken, AddCoinsSchema, LeaderBoardOutputSchema,
+from app.schemas import (AccessToken, CanSpinSchema, LeaderBoardOutputSchema,
                          LeaderBoardRowOutputSchema, PlayerCreateSchema,
                          PlayerOutputSchema, TokenOutputSchema,
                          TokenShowSchema, TokensOutputSchema,
-                         TokenUpgradeSchema)
+                         TokenUpgradeSchema, WheelSpinSchema)
 from app.services import (create_access_token_for_user, get_password_hash,
                           verify_password)
 
@@ -23,6 +23,7 @@ STRAIGHT_POINTS = 20
 
 STRIKE_COINS = 1
 STRIKE_POINTS = 1
+SPIN_COST = 3
 
 router = APIRouter()
 
@@ -83,6 +84,7 @@ async def create_player(
             t["token_id"]: PlayerTokenStats(count=0, upgrade=0, straight=False)
             for t in tokens.get_list()
         },
+        last_spin=None,
     )
 
     players.create(player)
@@ -269,16 +271,50 @@ async def upgrade_token(
     return PlayerOutputSchema.from_model(player)
 
 
+def is_free_spin_available(player: Player) -> bool:
+    if "last_spin" not in player or player["last_spin"] is None:
+        return True
+
+    now = datetime.now()
+    last = player["last_spin"]
+
+    return (now.date() - last.date()) >= timedelta(days=1)
+
+
+@router.get(
+    "/can-spin",
+    response_model=CanSpinSchema,
+)
+async def can_spin(
+    player: Player = Depends(get_current_player),
+) -> CanSpinSchema:
+    return CanSpinSchema(free_spin=is_free_spin_available(player))
+
+
 @router.post(
-    "/add-coins",
+    "/wheel-spin",
     response_model=PlayerOutputSchema,
 )
-async def add_coins(
-    create_data: AddCoinsSchema,
+async def wheel_spin(
+    create_data: WheelSpinSchema,
     player: Player = Depends(get_current_player),
     players: Players = Depends(get_collection(Players)),
 ) -> PlayerOutputSchema:
-    player["stats"]["coins"] += create_data.coins
+    if create_data.free:
+        if not is_free_spin_available(player):
+            raise HTTPBadRequestError(f"Player does not have free spin available.")
+
+        player["last_spin"] = datetime.now()
+    else:
+        if not player["stats"]["coins"] >= SPIN_COST:
+            raise HTTPBadRequestError(
+                f"Not enought coins for spin. {SPIN_COST} coins are required, only {player['stats']['coins']} coins are available."
+            )
+
+        player["stats"]["coins"] -= SPIN_COST
+
+    player["stats"]["coins"] += create_data.prize
+
     players.update(player)
 
     return PlayerOutputSchema.from_model(player)

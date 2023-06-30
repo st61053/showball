@@ -120,8 +120,9 @@ class TokenUpgradeSchema(BaseModel):
     token_id: str
 
 
-class AddCoinsSchema(BaseModel):
-    coins: int = Field(gt=0)
+class WheelSpinSchema(BaseModel):
+    prize: int = Field(ge=0)
+    free: bool
 
 
 class LeaderBoardRowOutputSchema(BaseModel):
@@ -131,3 +132,7 @@ class LeaderBoardRowOutputSchema(BaseModel):
 
 class LeaderBoardOutputSchema(BaseModel):
     rows: list[LeaderBoardRowOutputSchema]
+
+
+class CanSpinSchema(BaseModel):
+    free_spin: bool

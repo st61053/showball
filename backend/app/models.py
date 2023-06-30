@@ -21,6 +21,7 @@ class Player(TypedDict):
     password: str
     stats: PlayerStats
     tokens: dict[str, PlayerTokenStats]
+    last_spin: datetime | None
 
 
 class Token(TypedDict):
