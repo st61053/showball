@@ -251,7 +251,7 @@ async def upgrade_token(
 
     upgrade = min(max(player_token["upgrade"], 0), 2)  # cap to [0,2]
 
-    new_upgrade = str(upgrade + 1)
+    new_upgrade = str(upgrade)
 
     player_stats = player["stats"]
 

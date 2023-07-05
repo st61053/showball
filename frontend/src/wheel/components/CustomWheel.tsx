@@ -1,5 +1,5 @@
-import { Box, Button, Typography } from '@mui/material';
-import React, { useState } from 'react'
+import { Box, Button, Card, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react'
 import { Wheel } from 'react-custom-roulette'
 import { IMAGES_RESOURCES, WHEEL_PRIZES } from '../../tokens/constants';
 import StatItem from '../../players/components/StatItem';
@@ -9,7 +9,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { addCoin, canSpin, loginPlayer } from '../../players/actions';
 import { GlobalState } from '../../global';
 import Token from '../../tokens/components/Token';
-import { IPlayerToken } from '../../players/types';
+import Coin from '../../store/components/Coin';
 
 const CustomWheel = () => {
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
@@ -18,12 +18,15 @@ const CustomWheel = () => {
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
     const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
 
-    const [FREE_UPGRADE_TOKEN_ID, setFreeUpgradeTokenId] = useState<string>("");
 
-    const WHEEL_COST = 3;
+    const [FREE_UPGRADE_TOKEN_ID, setFreeUpgradeTokenId] = useState<string>("");
+    const [RULLETE_RERENDER, setRulleteRerender] = useState(true);
+    const [LAST_WIN, setLastWin] = useState(0);
+
+    const WHEEL_COST = 5;
 
     const getFreeUpdateToken = () => {
-        let min = 10;
+        let min = 9999;
 
         LOGIN_PLAYER.tokens.forEach((token) => {
             if (token.upgrade < min) {
@@ -33,7 +36,8 @@ const CustomWheel = () => {
 
         const POSIBLE_WIN_TOKENS = LOGIN_PLAYER.tokens.filter((token) => token.upgrade === min);
 
-        setFreeUpgradeTokenId(POSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].tokenId);
+        // setFreeUpgradeTokenId(POSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].tokenId);
+        return POSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].tokenId;
     }
 
     const getPlayerSpin = async () => {
@@ -56,51 +60,83 @@ const CustomWheel = () => {
     }
 
     const wheelSpin = async () => {
+        setRulleteRerender(false);
 
-        await getFreeUpdateToken();
+        if (localStorage.access_token) {
+            await fetch(`${SEVER_PREFIX}/api/v1/wheel-spin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                },
+                body: JSON.stringify({ prize: WIN_LIST[data[prizeNumber].option], free: CAN_SPIN })
+            })
+                .then(response => response.json())
+                .then(async json => {
+                    if (data[prizeNumber].option === 'secret') {
 
-        if (FREE_UPGRADE_TOKEN_ID === "") {
-            if (localStorage.access_token) {
-                const response = await fetch(`${SEVER_PREFIX}/api/v1/wheel-spin`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
-                    },
-                    body: JSON.stringify({ prize: WIN_LIST[data[prizeNumber].option], free: CAN_SPIN })
+                        const tokenId = getFreeUpdateToken();
+                        await fetch(`${SEVER_PREFIX}/api/v1/upgrade-token`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                            },
+                            body: JSON.stringify({ token_id: tokenId, free: true })
+                        })
+                            .then(response => response.json())
+                            .then(async js => {
+                                setFreeUpgradeTokenId(tokenId);
+                                await getPlayerSpin();
+                                dispatch(loginPlayer(js));
+                            })
+                    } else {
+                        await getPlayerSpin();
+                        dispatch(loginPlayer(json));
+                    }
+
                 })
-    
-                const json = await response.json();
-    
-                if (response.ok) {
-                    await getPlayerSpin();
-                    dispatch(loginPlayer(json))
-                }
-            }
-        } else {
-            if (localStorage.access_token) {
-                const response = await fetch(`${SEVER_PREFIX}/api/v1/wheel-spin`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
-                    },
-                    body: JSON.stringify({ prize: WIN_LIST[data[prizeNumber].option], free: CAN_SPIN })
+                .then(() => {
+                    setRulleteRerender(true);
+                    setMustSpin(false);
                 })
-    
-                const json = await response.json();
-    
-                if (response.ok) {
-                    await getPlayerSpin();
-                    dispatch(loginPlayer(json))
-                }
-            }
+                .catch(error => {
+                    wheelSpin();
+                });
+
+            // const json = await response.json();
+            // if (response.ok) {
+
+            //     if (data[prizeNumber].option === 'secret') {
+
+            //         const tokenId = await getFreeUpdateToken();
+
+            //         const res = await fetch(`${SEVER_PREFIX}/api/v1/upgrade-token`, {
+            //             method: 'POST',
+            //             headers: {
+            //                 'Content-Type': 'application/json',
+            //                 'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+            //             },
+            //             body: JSON.stringify({ token_id: tokenId, free: true })
+            //         })
+
+            //         setFreeUpgradeTokenId(tokenId);
+            //         const j = await res.json();
+
+            //         if (res.ok) {
+            //             await getPlayerSpin();
+            //             dispatch(loginPlayer(j));
+            //         }
+            //     } else {
+            //         await getPlayerSpin();
+            //         dispatch(loginPlayer(json));
+            //     }
+
+            // }
         }
-
     }
 
-
-    const { coin } = IMAGES_RESOURCES;
+    const { coin, pointer } = IMAGES_RESOURCES;
 
     const { low, medium, hight, huge, secret } = WHEEL_PRIZES;
 
@@ -116,8 +152,6 @@ const CustomWheel = () => {
         { option: 'medium', image: { uri: medium, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#9c27b0", textColor: 'black' } },
         { option: 'secret', image: { uri: secret, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#d32f2f", textColor: 'black' } },
         { option: 'low', image: { uri: low, offsetX: 0, offsetY: 200, sizeMultiplier: 0.6 }, style: { backgroundColor: "#1976d2", textColor: 'black' } },
-
-
     ]
 
     type IWin = {
@@ -129,7 +163,7 @@ const CustomWheel = () => {
         medium: 3,
         hight: 5,
         huge: 10,
-        secret: 100
+        secret: 0
     }
 
     const [mustSpin, setMustSpin] = useState(false);
@@ -140,11 +174,14 @@ const CustomWheel = () => {
         if (!mustSpin) {
             const newPrizeNumber = Math.floor(Math.random() * data.length);
             setPrizeNumber(newPrizeNumber);
+            setFreeUpgradeTokenId("");
             setMustSpin(true);
             setSpin(false);
             dispatch(addCoin(-WHEEL_COST));
+            // setShow(false);
         }
     }
+
 
     return (
         <Box
@@ -155,32 +192,68 @@ const CustomWheel = () => {
                 alignItems: "center",
                 // justifyContent: "center",
                 height: "100%",
+                pt: 2
             }}
         >
-            <Box
+            <Card
                 sx={{
-                    pt: 8
+                    display: "flex",
+                    alignItems: "center",
+                    width: "93%",
+                    padding: "1.15em 0",
+                    gap: 2
                 }}
             >
-                <Wheel
-                    mustStartSpinning={mustSpin}
-                    prizeNumber={prizeNumber}
-                    data={data}
-                    spinDuration={0.4}
-                    onStopSpinning={() => {
-                        setMustSpin(false);
-                        setSpin(true);
-                        // dispatch(addCoin(WIN_LIST[data[prizeNumber].option]))
-                        wheelSpin();
+                <Typography
+                    variant="subtitle1"
+                    sx={{
+                        fontWeight: "bold",
+                        ml: 1.5
                     }}
-                    pointerProps={{}}
-                />
-            </Box>
+                >
+                    {`Kolo štěstí`}
+                </Typography>
+                <Box
+                    sx={{ marginLeft: "auto", mr: 1.5 }}
+                >
+                    <Coin count={LOGIN_PLAYER?.stats.coins || 0} />
+                </Box>
 
-            {spin && <Typography
-                variant="h5"
+            </Card>
+
+            <Box
                 sx={{
                     pt: 4,
+                    width: "93%",
+                    overflow: "hidden",
+                    display: "flex",
+                    justifyContent: "center"
+                }}
+            >
+                {LOGIN_PLAYER && RULLETE_RERENDER &&
+                    <Wheel
+                        
+                        mustStartSpinning={mustSpin}
+                        prizeNumber={prizeNumber}
+                        data={data}
+                        spinDuration={0.4}
+                        onStopSpinning={async () => {
+                            setSpin(true);
+                            setLastWin(prizeNumber);
+                            wheelSpin();
+                            // dispatch(addCoin(WIN_LIST[data[prizeNumber].option]))
+                        }}
+                        pointerProps={{ src: pointer }}
+                        startingOptionIndex={LAST_WIN}
+
+
+                    />}
+            </Box>
+
+            {spin && RULLETE_RERENDER && <Typography
+                variant="h5"
+                sx={{
+                    pt: 2,
                     pb: 1,
                     fontWeight: "bold"
                 }}
@@ -188,9 +261,9 @@ const CustomWheel = () => {
                 Vyhrál jsi:
             </Typography>}
 
-            {spin && data[prizeNumber].option !== "secret" && <StatItem count={WIN_LIST[data[prizeNumber].option]} img={coin} />}
+            {spin && RULLETE_RERENDER && data[prizeNumber].option !== "secret" && <StatItem count={WIN_LIST[data[prizeNumber].option]} img={coin} />}
 
-            {spin && data[prizeNumber].option === "secret" &&
+            {spin && RULLETE_RERENDER && data[prizeNumber].option === "secret" &&
 
                 <Box
                     sx={{
@@ -206,11 +279,11 @@ const CustomWheel = () => {
                             fontWeight: "bold"
                         }}
                     >
-                        Free upgrade na
+                        Vylepšení zdarma na
                     </Typography>
 
                     {
-                        TOKENS && FREE_UPGRADE_TOKEN_ID !== "" &&
+                        TOKENS && FREE_UPGRADE_TOKEN_ID !== "" && RULLETE_RERENDER &&
                         <Token token={TOKENS?.find((tok) => tok.id === FREE_UPGRADE_TOKEN_ID) || TOKENS[0]} width={50} />
                     }
 
@@ -246,7 +319,7 @@ const CustomWheel = () => {
                         Roztočit!
                     </Typography>
                     {!CAN_SPIN && <Typography>{`(`}</Typography>}
-                    {!CAN_SPIN && <StatItem count={3} img={coin} />}
+                    {!CAN_SPIN && <StatItem count={WHEEL_COST} img={coin} />}
                     {!CAN_SPIN && <Typography>{`)`}</Typography>}
                 </Button>
             </Box>

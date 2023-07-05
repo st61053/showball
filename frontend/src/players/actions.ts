@@ -1,10 +1,14 @@
 import { IToken } from "../tokens/types";
-import { ADD_COIN, ADD_TOKEN, CAN_SPIN, LOGIN_PLAYER } from "./constants";
+import { ADD_COIN, ADD_TOKEN, CAN_SPIN, LOGIN_PLAYER, LOGOUT_PLAYER } from "./constants";
 import { IPlayer } from "./types";
 
 export const loginPlayer = (player: IPlayer) => ({
   player,
   type: LOGIN_PLAYER,
+});
+
+export const logoutPlayer = () => ({
+  type: LOGOUT_PLAYER,
 });
 
 export const addCoin = (count: number) => ({

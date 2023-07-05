@@ -81,10 +81,8 @@ const Profile = () => {
         }
 
         if (localStorage.access_token) {
-            console.log(true);
             getPlayer();
         } else {
-            console.log(false);
             setRedirect(true);  
         }
         

@@ -20,11 +20,13 @@ import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { GlobalState } from "../../global";
 import { canSpin } from "../../players/actions";
+import ProfileV2 from "../../players/components/ProfileV2";
+import { Box } from "@mui/material";
 const ShowBallSwiper = () => {
 
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
     const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
-    
+
     const getPlayerSpin = async () => {
 
         if (localStorage.access_token) {
@@ -51,6 +53,12 @@ const ShowBallSwiper = () => {
     }
 
     return (
+        <Box
+            sx={{
+                width: "min(100%, 400px)",
+                height: "min(100%, 900px)"
+            }}
+        >
             <Swip
                 pagination
                 modules={[Pagination]}
@@ -59,12 +67,12 @@ const ShowBallSwiper = () => {
                 onSlideChange={(slide) => swipe(slide)}
             >
                 <SwiperSlide><Leaderboard /></SwiperSlide>
-                <SwiperSlide><Profile /></SwiperSlide>
+                <SwiperSlide><ProfileV2 /></SwiperSlide>
                 <SwiperSlide><TokenController /></SwiperSlide>
                 <SwiperSlide><Store /></SwiperSlide>
                 <SwiperSlide><CustomWheel /></SwiperSlide>
             </Swip>
-
+        </Box>
     );
 }
 

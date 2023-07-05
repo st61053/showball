@@ -15,6 +15,7 @@ import fire from "../images/resources/fire.png";
 import coin from "../images/resources/coin.png";
 import logo from "../images/resources/logo_v3.png";
 import straight from "../images/resources/straight.png";
+import pointer from "../images/resources/pointer.png";
 
 import low from "../images/resources/wheel_low.png";
 import medium from "../images/resources/wheel_medium.png";
@@ -122,6 +123,7 @@ export const IMAGES_RESOURCES = {
   coin: coin,
   logo: logo,
   straight: straight,
+  pointer: pointer
 };
 
 export const WHEEL_PRIZES = {

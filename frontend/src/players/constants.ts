@@ -1,16 +1,20 @@
 import { IPlayer, IPlayerToken, IStats } from "./types";
-import matej from "../images/players/matej_v2.png";
+import matej from "../images/players/matej.png";
+import ondra from "../images/players/ondra.png";
+import veverka from "../images/players/veverka.png";
+import matej_profile from "../images/players/matej_profile.png";
 import { IKeyImage } from "../tokens/constants";
 
 const PLUGIN = "PLAYERS";
 
 export const LOGIN_PLAYER = `${PLUGIN}_login_player`;
+export const LOGOUT_PLAYER = `${PLUGIN}_logout_player`;
 export const ADD_COIN = `${PLUGIN}_add_coin`;
 export const ADD_TOKEN = `${PLUGIN}_add_token`;
 export const CAN_SPIN = `${PLUGIN}_can_spin`;
 
 export const PLAYER_IMAGE_LIST : IKeyImage = {
-  admin: matej,
+  admin: matej_profile,
 };
 
 export const CUSTOM_PLAYER_TOKENS: IPlayerToken[] = [

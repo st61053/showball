@@ -13,16 +13,17 @@ const Token = ({ token, width }: { token: IToken, width: number }) => {
             bc: string;
             bi: string
         };
-      };
+    };
 
-    const LEVEL_LIST : ILevelList = {
+
+    const LEVEL_LIST: ILevelList = {
         0: {
             bc: "#ffffff",
             bi: "linear-gradient(315deg, #ffffff 0%, #ffffff 100%)"
         },
         1: {
-            bc: "#352384",
-            bi: "linear-gradient(315deg, #352384 0%, #f3f3f5 74%)"
+            bc: "#256eff",
+            bi: "linear-gradient(315deg, #256eff 0%, #ffffff 74%)"
         },
         2: {
             bc: "#f9484a",
@@ -34,23 +35,34 @@ const Token = ({ token, width }: { token: IToken, width: number }) => {
         },
     }
 
+    const SHADOW_LIST = {
+
+    }
+
     return (
         <>
-        { TOKEN && <Card
-            sx={{
-                width: width,
-                height: width,
-                borderRadius: "50%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: LEVEL_LIST[TOKEN?.upgrade]["bc"],
-                backgroundImage: LEVEL_LIST[TOKEN?.upgrade]["bi"],
-                
-            }}
-        >
-            <img src={TOKENS_IMAGE_LIST[token?.id]} alt="kozel" width={"70%"} height={"70%"}></img>
-        </Card>}
+            {TOKEN && <Card
+                sx={{
+                    width: width,
+                    height: width,
+                    borderRadius: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: LEVEL_LIST[TOKEN?.upgrade]["bc"],
+                    backgroundImage: LEVEL_LIST[TOKEN?.upgrade]["bi"],
+
+
+                }}
+            >
+                <img 
+ 
+                style={{
+                    filter: width > 70 ? "drop-shadow(2px 1px 3px white)" : "drop-shadow(0.5px 0.5px 1px white)"
+                }}
+
+                src={TOKENS_IMAGE_LIST[token?.id]} alt="kozel" width={"70%"} height={"70%"}></img>
+        </Card >}
         </>
     );
 }

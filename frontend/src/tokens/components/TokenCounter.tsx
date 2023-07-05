@@ -27,7 +27,7 @@ const TokenCounter = ({ token }: { token: IPlayerToken }) => {
                     sx={{
                         borderRadius: "50%",
                         outline: SELECTED_TOKEN?.id === token.tokenId ? `2px solid ${theme.palette.primary.main}` : "",
-                        opacity: token.straight ? 1 : 0.4
+                        opacity: token.straight ? 1 : 0.5
                     }}
                     onClick={() => dispatch(changeSelectedToken(TOKENS?.find((tok) => tok.id === token.tokenId) || TOKENS[0]))}
                 >

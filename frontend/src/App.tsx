@@ -43,6 +43,9 @@ function App() {
     <Box
       sx={{
         height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
       }}>
         <Layout >
           <Router />

@@ -1,16 +1,48 @@
 import { Box, Button, Card, Divider, Grid, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GlobalState } from "../../global";
 import StoreItem from "./StoreItem";
 
 import Coin from "./Coin";
 import ProfileImage from "../../players/components/ProfileImage";
 import { PLAYER_IMAGE_LIST } from "../../players/constants";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
+import { loginPlayer } from "../../players/actions";
+import StatItem from "../../players/components/StatItem";
+import { IMAGES_RESOURCES } from "../../tokens/constants";
 
 const Store = () => {
     const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
     const SELECTED_TOKEN = useSelector((state: GlobalState) => state.store.selectedToken);
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
+    const TOKEN = LOGIN_PLAYER.tokens.find((token) => token.tokenId === SELECTED_TOKEN?.id);
+    const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
+    const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+
+    const { coin } = IMAGES_RESOURCES;
+
+
+    const upgradeToken = async () => {
+        if (localStorage.access_token) {
+
+            const response = await fetch(`${SEVER_PREFIX}/api/v1/upgrade-token`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                },
+                body: JSON.stringify({ token_id: SELECTED_TOKEN?.id, free: false })
+            })
+
+            const json = await response.json();
+
+            if (response.ok) {
+                dispatch(loginPlayer(json));
+            }
+
+        }
+    }
 
     return (
         <Box
@@ -39,30 +71,22 @@ const Store = () => {
                                 display: "flex",
                                 alignItems: "center",
                                 width: "100%",
-                                padding: "0.5em 0",
+                                padding: "1.15em 0",
                                 gap: 2
                             }}
                         >
-
-                            <Box
-                                sx={{
-                                    ml: 1
-                                }}
-                            >
-                                <ProfileImage img={PLAYER_IMAGE_LIST[LOGIN_PLAYER.id]} width={50} />
-                            </Box>
-
                             <Typography
                                 variant="subtitle1"
                                 textTransform={"capitalize"}
                                 sx={{
                                     fontWeight: "bold",
+                                    ml: 1.5
                                 }}
                             >
-                                {LOGIN_PLAYER?.name}
+                                {`Obchod`}
                             </Typography>
                             <Box
-                                sx={{ marginLeft: "auto", mr: 1 }}
+                                sx={{ marginLeft: "auto", mr: 1.5 }}
                             >
                                 <Coin count={LOGIN_PLAYER?.stats.coins || 0} />
                             </Box>
@@ -79,28 +103,45 @@ const Store = () => {
                     }
                 </Grid>
             </Box>
-            <Divider />
 
             {/* Button to add */}
             <Box
                 sx={{
                     marginTop: "auto",
-                    pb: 12,
+                    pb: 10,
                     width: "92%",
                 }}
             >
                 <Button
                     variant="contained"
-                    sx={{ width: "100%", pt: 2, pb: 2, }}
-                    disabled={!Boolean(SELECTED_TOKEN)}
+                    sx={{
+                        width: "100%",
+                        pt: 2,
+                        pb: 2,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 1
+                    }}
+                    disabled={
+                        !Boolean(SELECTED_TOKEN) 
+                        || Boolean(TOKEN && SELECTED_TOKEN && SELECTED_TOKEN?.upgrades[TOKEN?.upgrade] > LOGIN_PLAYER.stats.coins)
+                        || Boolean(TOKEN && TOKEN?.upgrade > 2)
+                    }
+                    onClick={() => upgradeToken()}
                 >
 
-                    <Typography>
-                        Koupit
-                    </Typography>
+                    {
+                        TOKEN
+                            ? <Typography> {TOKEN?.upgrade < 3 ? "Vylepšit!" : "Max vylepšení!"} </Typography>
+                            : <Typography> {"Vylepšit!"} </Typography>
+                    }
+                    {TOKEN && SELECTED_TOKEN && TOKEN?.upgrade < 3 && <Typography>{`(`}</Typography>}
+                    {TOKEN && SELECTED_TOKEN && TOKEN?.upgrade < 3 && <StatItem count={SELECTED_TOKEN?.upgrades[TOKEN?.upgrade]} img={coin} />}
+                    {TOKEN && SELECTED_TOKEN && TOKEN?.upgrade < 3 && <Typography>{`)`}</Typography>}
                 </Button>
             </Box>
-        </Box>
+        </Box >
     );
 }
 

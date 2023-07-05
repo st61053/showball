@@ -1,5 +1,5 @@
 import { AppAction } from "../global";
-import { ADD_COIN, ADD_TOKEN, CAN_SPIN, LOGIN_PLAYER } from "./constants";
+import { ADD_COIN, ADD_TOKEN, CAN_SPIN, LOGIN_PLAYER, LOGOUT_PLAYER } from "./constants";
 import { IPlayer, IPlayerState } from "./types";
 
 export const DEFAULT_PLAYER : IPlayer = {
@@ -42,6 +42,12 @@ const defaultState: IPlayerState = {
         ...state,
         loginPlayer: action.player,
         isLoggedIn: true
+      }
+      case LOGOUT_PLAYER: 
+      return {
+        ...state,
+        loginPlayer: DEFAULT_PLAYER,
+        isLoggedIn: false
       }
       case ADD_TOKEN: 
       return {

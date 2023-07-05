@@ -23,12 +23,12 @@ const StoreItem = ({ token }: { token: IToken }) => {
                     flexDirection: "column",
                     alignItems: "center",
                     p: 0.5,
-                    gap: 0.5,
+                    gap: 1,
                     outline: SELECTED_TOKEN?.id === token.id ? `2px solid ${theme.palette.primary.main}` : ""
                 }}
                 onClick={() => dispatch(changeSelectedToken(token))}
             >
-                <Token token={token} width={80} />
+                <Token token={token} width={65} />
 
                 {
                     TOKEN.upgrade < 3 

@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { loginPlayer } from "../actions";
-import { CUSTOM_PLAYER } from "../constants";
 import { GlobalState } from "../../global";
 import { Navigate } from "react-router-dom";
 
