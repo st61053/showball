@@ -8,9 +8,10 @@ from app.db import Players, Strikes, Tokens
 from app.models import Player, PlayerStats, PlayerTokenStats, Strike, Token
 from app.schemas import (AccessToken, CanSpinSchema, LeaderBoardOutputSchema,
                          LeaderBoardRowOutputSchema, PlayerCreateSchema,
-                         PlayerOutputSchema, TokenOutputSchema,
-                         TokenShowSchema, TokensOutputSchema,
-                         TokenUpgradeSchema, WheelSpinSchema)
+                         PlayerOutputSchema, PlayersOutputSchema,
+                         TokenOutputSchema, TokenShowSchema,
+                         TokensOutputSchema, TokenUpgradeSchema,
+                         WheelSpinSchema)
 from app.services import (create_access_token_for_user, get_password_hash,
                           verify_password)
 
@@ -49,15 +50,24 @@ async def token(
     return AccessToken(access_token=access_token, token_type="bearer")
 
 
+@router.get("/players", response_model=PlayersOutputSchema)
+async def get_players(
+    players: Players = Depends(get_collection(Players)),
+) -> PlayerOutputSchema:
+    return PlayersOutputSchema(
+        players=[PlayerOutputSchema.from_model(p) for p in players.get_list()]
+    )
+
+
 @router.get("/player", response_model=PlayerOutputSchema)
-async def get_player(
+async def get_player_by_username(
     player: Player = Depends(get_current_player),
 ) -> PlayerOutputSchema:
     return PlayerOutputSchema.from_model(player)
 
 
 @router.post(
-    "/player",
+    "/players",
     response_model=PlayerOutputSchema,
     status_code=status.HTTP_201_CREATED,
 )
@@ -101,7 +111,7 @@ async def get_tokens(
     )
 
 
-@router.get("/token/{token_id}", response_model=TokenOutputSchema)
+@router.get("/tokens/{token_id}", response_model=TokenOutputSchema)
 async def get_token_by_id(
     token_id: str = Path(..., title="Token identifier"),
     tokens: Tokens = Depends(get_collection(Tokens)),
@@ -251,19 +261,23 @@ async def upgrade_token(
 
     upgrade = min(max(player_token["upgrade"], 0), 2)  # cap to [0,2]
 
-    new_upgrade = str(upgrade)
+    new_upgrade = upgrade + 1
+    new_upgrade_key = str(new_upgrade)
 
     player_stats = player["stats"]
 
-    if not create_data.free and player_stats["coins"] < token["upgrades"][new_upgrade]:
+    if (
+        not create_data.free
+        and player_stats["coins"] < token["upgrades"][new_upgrade_key]
+    ):
         raise HTTPBadRequestError(
-            f"Not enought coins for level {new_upgrade} {token['name']} upgrade. Upgrade cost {token['upgrades'][new_upgrade]} but only {player_stats['coins']} is available."
+            f"Not enought coins for level {new_upgrade} {token['name']} upgrade. Upgrade cost {token['upgrades'][new_upgrade_key]} but only {player_stats['coins']} is available."
         )
 
-    player_token["upgrade"] = upgrade + 1
+    player_token["upgrade"] = new_upgrade
 
     if not create_data.free:
-        player_stats["coins"] -= token["upgrades"][new_upgrade]
+        player_stats["coins"] -= token["upgrades"][new_upgrade_key]
 
     player["tokens"][token["token_id"]] = player_token
     player["stats"] = player_stats

@@ -68,6 +68,10 @@ class PlayerOutputSchema(BaseModel):
         )
 
 
+class PlayersOutputSchema(BaseModel):
+    players: list[PlayerOutputSchema]
+
+
 class PlayerCreateSchema(BaseModel):
     name: str
     player_id: str
