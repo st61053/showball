@@ -4,8 +4,6 @@ import { GlobalState } from "../../global";
 import StoreItem from "./StoreItem";
 
 import Coin from "./Coin";
-import ProfileImage from "../../players/components/ProfileImage";
-import { PLAYER_IMAGE_LIST } from "../../players/constants";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { loginPlayer } from "../../players/actions";

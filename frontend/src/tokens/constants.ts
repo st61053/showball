@@ -23,6 +23,10 @@ import hight from "../images/resources/wheel_hight.png";
 import huge from "../images/resources/wheel_huge.png";
 import secret from "../images/resources/wheel_secret.png";
 
+import t1 from "../images/resources/t1.gif";
+import t2 from "../images/resources/t2.gif";
+import t3 from "../images/resources/t3.gif";
+
 const PLUGIN = "TOKENS";
 
 export const CHANGE_SELECTED_TOKEN = `${PLUGIN}_change_selected_token`;
@@ -45,85 +49,16 @@ export const TOKENS_IMAGE_LIST: IKeyImage = {
   moucha: moucha,
 };
 
-// export const CUSTOM_TOKENS: IToken[] = [
-//   {
-//     id: "slimak",
-//     name: "slimák",
-//     points: 1,
-//     coins: 1,
-//     upgrades: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//   },
-//   {
-//     id: "krtek",
-//     name: "krtek",
-//     points: 1,
-//     coins: 1,
-//     upgrades: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//   },
-//   {
-//     id: "mozek",
-//     name: "mozek",
-//     points: 1,
-//     coins: 1,
-//     upgrades: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//   },
-//   {
-//     id: "laso",
-//     name: "laso",
-//     points: 1,
-//     coins: 1,
-//     upgrades: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//   },
-//   {
-//     id: "slon",
-//     name: "slon",
-//     points: 1,
-//     coins: 1,
-//     upgrades: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//   },
-//   {
-//     id: "netopyr",
-//     name: "netopýr",
-//     points: 1,
-//     coins: 1,
-//     upgrades: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//   },
-//   {
-//     id: "kozel",
-//     name: "kozel",
-//     points: 1,
-//     coins: 1,
-//     upgrades: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//   },
-//   {
-//     id: "kanon",
-//     name: "kanon",
-//     points: 1,
-//     coins: 1,
-//     upgrades: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//   },
-//   {
-//     id: "ctyrlistek",
-//     name: "ctyrlistek",
-//     points: 1,
-//     coins: 1,
-//     upgrades: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//   },
-//   {
-//     id: "moucha",
-//     name: "moucha",
-//     points: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//     coins: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//     upgrades: { 0: 5, 1: 10, 2: 15, 3: 20 },
-//   },
-// ];
-
 export const IMAGES_RESOURCES = {
   fire: fire,
   coin: coin,
   logo: logo,
   straight: straight,
-  pointer: pointer
+  pointer: pointer,
+  t1: t1,
+  t2: t2,
+  t3: t3
+
 };
 
 export const WHEEL_PRIZES = {

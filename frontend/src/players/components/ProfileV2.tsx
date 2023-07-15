@@ -33,9 +33,21 @@ const ProfileV2 = () => {
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
     const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
+    const PLAYERS = useSelector((state: GlobalState) => state.players.players);
 
     const [REDIRECT, setRedirect] = useState(false);
     const theme = useTheme();
+
+    const getMax = (option) => {
+        let min = 0;
+
+        PLAYERS.forEach((player) => {
+            if (min < player.stats[option]) {
+                min = player.stats[option];
+            }
+        })
+        return min;
+    }
 
     useEffect(() => {
         const getPlayer = async () => {
@@ -188,7 +200,7 @@ const ProfileV2 = () => {
                                                             color: theme.palette.grey[500]
                                                         }}
                                                     >
-                                                        {"Lovec mozků"}
+                                                        {LOGIN_PLAYER.title}
                                                     </Typography>
                                                 </Grid>
                                                 <Grid item xs={12}>
@@ -197,10 +209,10 @@ const ProfileV2 = () => {
                                                             <ProgressBar title="strike" count={LOGIN_PLAYER.stats.strike} max={22} level={3} />
                                                         </Grid>
                                                         <Grid item xs={12}>
-                                                            <ProgressBar title="points" count={LOGIN_PLAYER.stats.points} max={1000} level={1} />
+                                                            <ProgressBar title="points" count={LOGIN_PLAYER.stats.points} max={getMax("points")} level={1} />
                                                         </Grid>
                                                         <Grid item xs={12}>
-                                                            <ProgressBar title="coins" count={LOGIN_PLAYER.stats.coins} max={1000} level={2} />
+                                                            <ProgressBar title="coins" count={LOGIN_PLAYER.stats.coins} max={getMax("coins")} level={2} />
                                                         </Grid>
                                                         <Grid item xs={12}>
                                                             <ProgressBar title="postupka" count={LOGIN_PLAYER.tokens.reduce((prev, token) => token.straight ? prev + 1 : prev, 0)} max={10} level={0} />

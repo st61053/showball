@@ -1,5 +1,5 @@
 import { AppAction } from "../global";
-import { ADD_COIN, ADD_TOKEN, CAN_SPIN, LOGIN_PLAYER, LOGOUT_PLAYER } from "./constants";
+import { ADD_COIN, ADD_TOKEN, CAN_SPIN, GET_PLAYERS, LOGIN_PLAYER, LOGOUT_PLAYER } from "./constants";
 import { IPlayer, IPlayerState } from "./types";
 
 export const DEFAULT_PLAYER : IPlayer = {
@@ -65,6 +65,11 @@ const defaultState: IPlayerState = {
       return {
         ...state,
         spin: action.spin
+      }
+      case GET_PLAYERS: 
+      return {
+        ...state,
+        players: action.players
       }
       default:
         return state;

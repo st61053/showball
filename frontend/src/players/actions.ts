@@ -1,10 +1,15 @@
 import { IToken } from "../tokens/types";
-import { ADD_COIN, ADD_TOKEN, CAN_SPIN, LOGIN_PLAYER, LOGOUT_PLAYER } from "./constants";
+import { ADD_COIN, ADD_TOKEN, CAN_SPIN, GET_PLAYERS, LOGIN_PLAYER, LOGOUT_PLAYER } from "./constants";
 import { IPlayer } from "./types";
 
 export const loginPlayer = (player: IPlayer) => ({
   player,
   type: LOGIN_PLAYER,
+});
+
+export const initPlayers = (players: IPlayer[]) => ({
+  players,
+  type: GET_PLAYERS,
 });
 
 export const logoutPlayer = () => ({

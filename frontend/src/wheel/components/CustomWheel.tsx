@@ -177,7 +177,9 @@ const CustomWheel = () => {
             setFreeUpgradeTokenId("");
             setMustSpin(true);
             setSpin(false);
-            dispatch(addCoin(-WHEEL_COST));
+            if (!CAN_SPIN) {
+                dispatch(addCoin(-WHEEL_COST));
+            }
             // setShow(false);
         }
     }
@@ -230,7 +232,7 @@ const CustomWheel = () => {
                     justifyContent: "center"
                 }}
             >
-                {LOGIN_PLAYER && RULLETE_RERENDER &&
+                {LOGIN_PLAYER &&
                     <Wheel
                         
                         mustStartSpinning={mustSpin}

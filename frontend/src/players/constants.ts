@@ -1,8 +1,14 @@
 import { IPlayer, IPlayerToken, IStats } from "./types";
-import matej from "../images/players/matej.png";
-import ondra from "../images/players/ondra.png";
-import veverka from "../images/players/veverka.png";
+
+import veverka_profile from "../images/players/veverka_profile.png";
 import matej_profile from "../images/players/matej_profile.png";
+import ondra_profile from "../images/players/ondra_profile.png";
+import mara_profile from "../images/players/mara_profile.png";
+import ales_profile from "../images/players/ales_profile.png";
+import luky_profile from "../images/players/luky_profile.png";
+import gulas_profile from "../images/players/gulas_profile.png";
+import zeli_profile from "../images/players/zeli_profile.png";
+
 import { IKeyImage } from "../tokens/constants";
 
 const PLUGIN = "PLAYERS";
@@ -12,9 +18,19 @@ export const LOGOUT_PLAYER = `${PLUGIN}_logout_player`;
 export const ADD_COIN = `${PLUGIN}_add_coin`;
 export const ADD_TOKEN = `${PLUGIN}_add_token`;
 export const CAN_SPIN = `${PLUGIN}_can_spin`;
+export const GET_PLAYERS = `${PLUGIN}_get_players`;
 
 export const PLAYER_IMAGE_LIST : IKeyImage = {
   admin: matej_profile,
+
+  matej: matej_profile,
+  ondra: ondra_profile,
+  ales: ales_profile,
+  luky: luky_profile,
+  gulas: gulas_profile,
+  zeli: zeli_profile,
+  mara: mara_profile,
+  veverka: veverka_profile
 };
 
 export const CUSTOM_PLAYER_TOKENS: IPlayerToken[] = [

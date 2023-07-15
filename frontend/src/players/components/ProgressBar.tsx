@@ -1,13 +1,13 @@
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Card, Typography, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import { GlobalState } from "../../global";
 import { IToken } from "../../tokens/types";
 
 const ProgressBar = ({ title, count, max, level }: { title: string, count: number, max: number, level: number }) => {
 
+    const theme = useTheme();
 
-
-    type ILevelList = {
+   type ILevelList = {
         [key: number]: {
             bc: string;
             bi: string
@@ -61,18 +61,19 @@ const ProgressBar = ({ title, count, max, level }: { title: string, count: numbe
                         fontWeight: "bold",
                     }}
                 >
-                    {count}
+                    {level === 0 ? `${count} / ${max}` : count}
                 </Typography>
             </Box>
             <Card
                 sx={{
                     width: "100%",
                     height: 7,
+                    backgroundColor: theme.palette.grey[400]
                 }}
             >
                 <Card
                     sx={{
-                        width: `${100 / max * count}%`,
+                        width: max === 0 ? "0%" : `${100 / max * count}%`,
                         height: "100%",
                         backgroundColor: LEVEL_LIST[level]["bc"],
                         backgroundImage: LEVEL_LIST[level]["bi"],

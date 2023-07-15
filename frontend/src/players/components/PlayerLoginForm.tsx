@@ -93,8 +93,8 @@ const PlayerLoginForm = () => {
         <Box
             sx={{
                 display: 'flex',
-                height: '100%',
-                width: "100%",
+                width: "min(100%, 400px)",
+                height: "100%",
                 flexDirection: "column",
                 alignItems: "center",
                 backgroundColor: "#ffffff"
