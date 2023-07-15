@@ -24,6 +24,7 @@ STRAIGHT_POINTS = 20
 
 STRIKE_COINS = 1
 STRIKE_POINTS = 1
+STRIKE_DIV = 3
 SPIN_COST = 5
 
 router = APIRouter()
@@ -158,7 +159,7 @@ def process_strike_count(player: Player, set_strike: bool) -> Player:
 
     if last is not None and last < now:
         if (now.date() - last.date()) > timedelta(days=2):
-            player_stats["strike"] = 0
+            player_stats["strike"] = 1
 
             if set_strike:
                 player_stats["last_strike"] = now
@@ -167,7 +168,7 @@ def process_strike_count(player: Player, set_strike: bool) -> Player:
             player_stats["strike"] += 1
             player_stats["last_strike"] = now
     else:
-        player_stats["strike"] = 0
+        player_stats["strike"] = 1
 
         if set_strike:
             player_stats["last_strike"] = now
@@ -203,10 +204,10 @@ async def show_token(
     upgrade = str(min(max(player_token["upgrade"], 0), 3))  # cap to [0,3]
 
     add_points = (
-        int(token["points"][upgrade]) + int(player_stats["strike"]) * STRIKE_POINTS
+        int(token["points"][upgrade]) + int(player_stats["strike"] / STRIKE_DIV) * STRIKE_POINTS
     )
     add_coins = (
-        int(token["coins"][upgrade]) + int(player_stats["strike"]) * STRIKE_COINS
+        int(token["coins"][upgrade]) + int(player_stats["strike"] / STRIKE_DIV) * STRIKE_COINS
     )
 
     player_stats["points"] += add_points
