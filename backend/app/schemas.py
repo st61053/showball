@@ -52,6 +52,7 @@ class PlayerTokenOutputSchema(BaseModel):
 class PlayerOutputSchema(BaseModel):
     id: str
     name: str
+    title: str
     stats: PlayerStatsOutputSchema
     tokens: list[PlayerTokenOutputSchema]
 
@@ -60,6 +61,7 @@ class PlayerOutputSchema(BaseModel):
         return cls(
             id=model["player_id"],
             name=model["name"],
+            title=model["title"],
             stats=PlayerStatsOutputSchema.from_model(model["stats"]),
             tokens=[
                 PlayerTokenOutputSchema.from_model(i, t)
@@ -74,6 +76,7 @@ class PlayersOutputSchema(BaseModel):
 
 class PlayerCreateSchema(BaseModel):
     name: str
+    title: str
     player_id: str
     password: str
 
@@ -88,7 +91,8 @@ class PlayerCreateSchema(BaseModel):
         schema_extra = {
             "example": {
                 "name": "Name",
-                "player_id": "user_id",
+                "title": "Title",
+                "player_id": "player_id",
                 "password": "password",
             }
         }

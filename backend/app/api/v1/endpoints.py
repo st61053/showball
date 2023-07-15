@@ -89,6 +89,7 @@ async def create_player(
     player = Player(
         player_id=create_data.player_id,
         name=create_data.name,
+        title=create_data.title,
         password=password_hash,
         stats=PlayerStats(points=0, coins=0, strike=0, last_strike=None),
         tokens={

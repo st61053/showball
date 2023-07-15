@@ -18,6 +18,7 @@ class PlayerTokenStats(TypedDict):
 class Player(TypedDict):
     player_id: str
     name: str
+    title: str
     password: str
     stats: PlayerStats
     tokens: dict[str, PlayerTokenStats]
