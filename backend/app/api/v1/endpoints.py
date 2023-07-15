@@ -261,23 +261,22 @@ async def upgrade_token(
 
     upgrade = min(max(player_token["upgrade"], 0), 2)  # cap to [0,2]
 
-    new_upgrade = upgrade + 1
-    new_upgrade_key = str(new_upgrade)
+    upgrade_key = str(upgrade)
 
     player_stats = player["stats"]
 
     if (
         not create_data.free
-        and player_stats["coins"] < token["upgrades"][new_upgrade_key]
+        and player_stats["coins"] < token["upgrades"][upgrade_key]
     ):
         raise HTTPBadRequestError(
-            f"Not enought coins for level {new_upgrade} {token['name']} upgrade. Upgrade cost {token['upgrades'][new_upgrade_key]} but only {player_stats['coins']} is available."
+            f"Not enought coins for level {upgrade + 1} {token['name']} upgrade. Upgrade cost {token['upgrades'][upgrade_key]} but only {player_stats['coins']} is available."
         )
 
-    player_token["upgrade"] = new_upgrade
+    player_token["upgrade"] = upgrade + 1
 
     if not create_data.free:
-        player_stats["coins"] -= token["upgrades"][new_upgrade_key]
+        player_stats["coins"] -= token["upgrades"][upgrade_key]
 
     player["tokens"][token["token_id"]] = player_token
     player["stats"] = player_stats
