@@ -8,6 +8,11 @@ import ales_profile from "../images/players/ales_profile.png";
 import luky_profile from "../images/players/luky_profile.png";
 import gulas_profile from "../images/players/gulas_profile.png";
 import zeli_profile from "../images/players/zeli_profile.png";
+import jirka_profile from "../images/players/jirka_profile.png";
+import kuba_profile from "../images/players/kuba_profile.png";
+import simon_profile from "../images/players/simon_profile.png";
+import matous_profile from "../images/players/matous_profile.png";
+import placeholder_profile from "../images/players/placeholder_profile.png";
 
 import { IKeyImage } from "../tokens/constants";
 
@@ -30,7 +35,12 @@ export const PLAYER_IMAGE_LIST : IKeyImage = {
   gulas: gulas_profile,
   zeli: zeli_profile,
   mara: mara_profile,
-  veverka: veverka_profile
+  veverka: veverka_profile,
+  kuba: kuba_profile,
+  jirka: jirka_profile,
+  simon: simon_profile,
+  matous: matous_profile,
+  jezek: placeholder_profile
 };
 
 export const CUSTOM_PLAYER_TOKENS: IPlayerToken[] = [
