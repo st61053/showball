@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/showball/frontend-web/static/css/main.f855e6bc.css",
-    "main.js": "/showball/frontend-web/static/js/main.a3a84f17.js",
-    "static/js/787.50477f06.chunk.js": "/showball/frontend-web/static/js/787.50477f06.chunk.js",
-    "static/media/logo.svg": "/showball/frontend-web/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
-    "index.html": "/showball/frontend-web/index.html",
-    "main.f855e6bc.css.map": "/showball/frontend-web/static/css/main.f855e6bc.css.map",
-    "main.a3a84f17.js.map": "/showball/frontend-web/static/js/main.a3a84f17.js.map",
-    "787.50477f06.chunk.js.map": "/showball/frontend-web/static/js/787.50477f06.chunk.js.map"
+    "main.css": "/showball/static/css/main.f855e6bc.css",
+    "main.js": "/showball/static/js/main.be24f176.js",
+    "static/js/787.50477f06.chunk.js": "/showball/static/js/787.50477f06.chunk.js",
+    "static/media/logo.svg": "/showball/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/showball/index.html",
+    "main.f855e6bc.css.map": "/showball/static/css/main.f855e6bc.css.map",
+    "main.be24f176.js.map": "/showball/static/js/main.be24f176.js.map",
+    "787.50477f06.chunk.js.map": "/showball/static/js/787.50477f06.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.a3a84f17.js"
+    "static/js/main.be24f176.js"
   ]
 }
