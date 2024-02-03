@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.a13cb656.css",
-    "main.js": "/static/js/main.bc88109e.js",
+    "main.css": "/static/css/main.aa9b435f.css",
+    "main.js": "/static/js/main.b1b1e9d2.js",
     "static/media/showball-logo.png": "/static/media/showball-logo.57b1c5b6f11eefddcd20.png",
     "index.html": "/index.html",
-    "main.a13cb656.css.map": "/static/css/main.a13cb656.css.map",
-    "main.bc88109e.js.map": "/static/js/main.bc88109e.js.map"
+    "main.aa9b435f.css.map": "/static/css/main.aa9b435f.css.map",
+    "main.b1b1e9d2.js.map": "/static/js/main.b1b1e9d2.js.map"
   },
   "entrypoints": [
-    "static/css/main.a13cb656.css",
-    "static/js/main.bc88109e.js"
+    "static/css/main.aa9b435f.css",
+    "static/js/main.b1b1e9d2.js"
   ]
 }
