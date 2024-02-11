@@ -2,23 +2,6 @@ version: '3.8'
 
 services:
 
-  sb-frontend:
-    build:
-      context: ./frontend
-    image: showball-frontend
-    container_name: sb-frontend
-    ports:
-      - 3000:3000
-    volumes:
-      - ./frontend:/app
-      - '/app/node_modules'
-    networks:
-      - sb-network
-    depends_on:
-      - sb-backend
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-
   sb-backend:
     build:
       context: ./backend
@@ -27,18 +10,22 @@ services:
     depends_on:
       - sb-mongo
     volumes:
-      - ./backend/:/app
+      - ./backend/src/:/app/src/
       - /etc/localtime:/etc/localtime
     ports:
       - "8080:8080"
     networks:
       - sb-network
-    env_file:
-      - ./backend/.env
-    command: bash -c "poetry run uvicorn --host 0.0.0.0 app.main:app --port 8080 --reload"
+    environment:
+      PORT: "8080"
+      APP_SECRET: "secret-key"
+      DATABASE_NAME: "showball"
+      DATABASE_USER: "admin"
+      DATABASE_PASS: "admin"
+      DATABASE_URI: "mongodb://sb-mongo:27017"
 
   sb-mongo:
-    image: mongo:5.0.17
+    image: mongo:6.0
     container_name: sb-mongo
     ports:
       - 27017:27017
