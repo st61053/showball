@@ -19,8 +19,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
-    .setTitle('Showball API')
-    .setDescription('The showball backend API.')
+    .setTitle('SHOWBALL')
+    .setDescription('Some description.')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
@@ -29,7 +29,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(PORT, () => {
-    console.log(`Showball backend running at port ${PORT}`);
+    console.log(`Server running at port ${PORT}`);
   });
 }
 

@@ -3,7 +3,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { RoleType } from 'src/shared/enum/role-type.enum';
 
-export type PlayerDocument = mongoose.HydratedDocument<Player>;
 export type PlayerModel = mongoose.Model<Player>;
 
 @Schema({ _id: false })
@@ -51,7 +50,7 @@ class ChallengeStats {
 }
 
 @Schema({ timestamps: true })
-class Player {
+class Player extends mongoose.Document {
   _id: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true, index: true, unique: true })

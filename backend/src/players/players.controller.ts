@@ -13,8 +13,8 @@ import { CreatePlayerDTO } from './dto/create-player.dto';
 import { PlayerDTO } from './dto/player.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { RolesGuard } from '../auth/guard/roles.guard';
-import { HasRoles } from '../auth/decorators/roles.decorator';
-import { Public } from '../auth/decorators/public.decorator';
+import { HasRoles } from '../auth/decorator/roles.decorator';
+import { Public } from '../auth/decorator/public.decorator';
 import { RoleType } from '../shared/enum/role-type.enum';
 
 @ApiTags('Players')
@@ -24,7 +24,7 @@ export class PlayersController {
 
   @Public()
   @Post('/')
-  async create(@Body() body: CreatePlayerDTO) {
+  async createPlayer(@Body() body: CreatePlayerDTO) {
     const player = await this.playersService.create(body);
 
     return PlayerDTO.from(player);
@@ -50,7 +50,7 @@ export class PlayersController {
   @UseGuards(RolesGuard)
   @HasRoles(RoleType.Admin)
   @Get('/:playerId')
-  async getPlayer(@Param('playerId') playerId: string) {
+  async getPlayerById(@Param('playerId') playerId: string) {
     const player = await this.playersService.findById(playerId);
 
     return PlayerDTO.from(player);

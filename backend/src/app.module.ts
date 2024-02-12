@@ -5,7 +5,10 @@ import { PlayersModule } from './players/players.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './auth/guard/auth.guard';
+import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
+import { ProfileModule } from './profile/profile.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -18,17 +21,21 @@ import { AuthGuard } from './auth/guard/auth.guard';
         password: process.env.DATABASE_PASS,
       },
     }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', 'uploads'), serveStaticOptions: { extensions: ['jpg', 'jpeg', 'png'] }
+    // }),
 
     // feature module
     AuthModule,
     PlayersModule,
+    ProfileModule,
   ],
   controllers: [],
   providers: [
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
+      useClass: JwtAuthGuard,
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

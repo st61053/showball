@@ -18,7 +18,7 @@ services:
       - sb-network
     environment:
       PORT: "8080"
-      APP_SECRET: "secret-key"
+      SECRET_KEY: "secret-key"
       DATABASE_NAME: "showball"
       DATABASE_USER: "admin"
       DATABASE_PASS: "admin"
