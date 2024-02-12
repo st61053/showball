@@ -9,6 +9,8 @@ import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 import { ProfileModule } from './profile/profile.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { TokensModule } from './tokens/tokens.module';
+import { ChallengesModule } from './challenges/challenges.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { join } from 'path';
     AuthModule,
     PlayersModule,
     ProfileModule,
+    TokensModule,
+    ChallengesModule,
   ],
   controllers: [],
   providers: [

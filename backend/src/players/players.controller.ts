@@ -13,7 +13,7 @@ import { CreatePlayerDTO } from './dto/create-player.dto';
 import { PlayerDTO } from './dto/player.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { RolesGuard } from '../auth/guard/roles.guard';
-import { HasRoles } from '../auth/decorator/roles.decorator';
+import { Roles } from '../auth/decorator/roles.decorator';
 import { Public } from '../auth/decorator/public.decorator';
 import { RoleType } from '../shared/enum/role-type.enum';
 
@@ -37,7 +37,7 @@ export class PlayersController {
     isArray: true,
   })
   @UseGuards(RolesGuard)
-  @HasRoles(RoleType.Admin)
+  @Roles(RoleType.Admin)
   @Get('/')
   async getPlayers(@Query() paginationQuery: PaginationQueryDto) {
     const players = await this.playersService.findAll(paginationQuery);
@@ -48,7 +48,7 @@ export class PlayersController {
   @ApiBearerAuth()
   @ApiOkResponse({ description: 'Player', type: PlayerDTO })
   @UseGuards(RolesGuard)
-  @HasRoles(RoleType.Admin)
+  @Roles(RoleType.Admin)
   @Get('/:playerId')
   async getPlayerById(@Param('playerId') playerId: string) {
     const player = await this.playersService.findById(playerId);

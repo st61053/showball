@@ -17,7 +17,6 @@ export class AuthController {
   @ApiOkResponse({ description: 'Login', type: AccessTokenDTO })
   @Post('login')
   async login(@Request() req) {
-    console.log(req.user);
     return this.authService.login(req.user);
   }
 }
