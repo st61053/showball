@@ -7,34 +7,31 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 import { ProfileModule } from './profile/profile.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { TokensModule } from './tokens/tokens.module';
 import { ChallengesModule } from './challenges/challenges.module';
+import configuration from './config/configuration';
+import { MongooseConfigService } from './database/config.service';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    ThrottlerModule.forRoot([{ ttl: 60, limit: 10 }]),
-    MongooseModule.forRoot(process.env.DATABASE_URI, {
-      dbName: process.env.DATABASE_NAME,
-      auth: {
-        username: process.env.DATABASE_USER,
-        password: process.env.DATABASE_PASS,
-      },
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
     }),
-    // ServeStaticModule.forRoot({
-    //   rootPath: join(__dirname, '..', 'uploads'), serveStaticOptions: { extensions: ['jpg', 'jpeg', 'png'] }
-    // }),
+    ThrottlerModule.forRoot([{ ttl: 60, limit: 10 }]),
+    MongooseModule.forRootAsync({
+      useClass: MongooseConfigService,
+    }),
 
     // feature module
     AuthModule,
-    PlayersModule,
     ProfileModule,
+    PlayersModule,
     TokensModule,
     ChallengesModule,
+    FilesModule,
   ],
-  controllers: [],
   providers: [
     {
       provide: APP_GUARD,

@@ -21,4 +21,10 @@ export class TokenLevelDTO {
     @Min(0)
     @Type(() => Number)
     exps: number;
+
+    @ApiProperty({ example: 1 })
+    @IsNumber()
+    @Min(0)
+    @Type(() => Number)
+    nextLevelCost: number;
 }

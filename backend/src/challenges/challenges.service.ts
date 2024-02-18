@@ -1,26 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateChallengeDto } from './dto/create-challenge.dto';
 import { UpdateChallengeDto } from './dto/update-challenge.dto';
+import { Challenge } from './domain/challenge';
+import { ChallengeRepository } from './persistance/repositories/challenge.repository';
 
 @Injectable()
 export class ChallengesService {
-  create(body: CreateChallengeDto) {
-    return 'This action adds a new challenge';
+  constructor(private challengesRepository: ChallengeRepository) { }
+
+  async create(body: CreateChallengeDto): Promise<Challenge> {
+    const clonedPayload = {
+      state: true,
+      ...body
+    };
+
+    const challengeTextIdObject = await this.challengesRepository.findOne({ textId: clonedPayload.textId });
+
+    if (challengeTextIdObject) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            textId: 'textIdAlreadyExists',
+          },
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    return this.challengesRepository.create(clonedPayload);
   }
 
-  findAll() {
+  async findAll() {
     return `This action returns all challenges`;
   }
 
-  findOne(textId: string) {
+  async findOne(textId: string) {
     return `This action returns a #${textId} challenge`;
   }
 
-  update(textId: string, body: UpdateChallengeDto) {
+  async update(textId: string, body: UpdateChallengeDto) {
     return `This action updates a #${textId} challenge`;
   }
 
-  remove(textId: string) {
+  async remove(textId: string) {
     return `This action removes a #${textId} challenge`;
   }
 }

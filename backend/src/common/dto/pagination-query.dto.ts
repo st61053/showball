@@ -1,16 +1,21 @@
-import { IsPositive, IsNumber, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsNumber, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class PaginationQueryDto {
-  @ApiProperty({ required: true, default: 10 })
-  @IsPositive()
-  @Type(() => Number)
-  limit: number;
-
-  @ApiProperty({ required: true, default: 0 })
-  @Min(0)
+  @ApiProperty({
+    required: false,
+  })
+  @Transform(({ value }) => (value ? Number(value) : 1))
   @IsNumber()
-  @Type(() => Number)
-  offset: number;
+  @IsOptional()
+  page: number;
+
+  @ApiProperty({
+    required: false,
+  })
+  @Transform(({ value }) => (value ? Number(value) : 10))
+  @IsNumber()
+  @IsOptional()
+  limit: number;
 }

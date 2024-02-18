@@ -20,7 +20,7 @@ export class CreateTokenDto {
     @IsString()
     description: string;
 
-    @ApiProperty({ example: [{ points: 1, coins: 1, exps: 1 }] })
+    @ApiProperty({ example: [{ points: 1, coins: 1, exps: 1, nextLevelCost: 1 }] })
     @IsArray()
     @ArrayMinSize(1)
     @ArrayMaxSize(10)

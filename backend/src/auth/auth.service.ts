@@ -14,21 +14,29 @@ export class AuthService {
   ) { }
 
   async validateUser(username: string, password: string): Promise<UserPrincipal | null> {
-    const player = await this.playersService.findByUsername(username);
-    const match = await compare(password, player.password);
+    const player = await this.playersService.findOne({ username: username });
 
-    if (match) {
-      const user: UserPrincipal = {
-        playerId: player._id.toString(),
-        username: player.username,
-        email: player.email,
-        roles: player.roles,
-      };
-
-      return user;
+    if (!player) {
+      return null;
     }
 
-    return null;
+    const isValidPassword = await compare(
+      password,
+      player.password,
+    );
+
+    if (!isValidPassword) {
+      return null;
+    }
+
+    const user: UserPrincipal = {
+      playerId: player.id,
+      username: player.username,
+      email: player.email,
+      roles: player.roles,
+    };
+
+    return user;
   }
 
   async login(user: UserPrincipal): Promise<AccessToken> {

@@ -4,55 +4,73 @@ import {
   Param,
   Body,
   Post,
+  Patch,
   Query,
   UseGuards,
+  HttpCode,
+  HttpStatus,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  NotFoundException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiCreatedResponse, ApiParam } from '@nestjs/swagger';
 import { PlayersService } from './players.service';
 import { CreatePlayerDTO } from './dto/create-player.dto';
-import { PlayerDTO } from './dto/player.dto';
+import { UpdatePlayerDTO } from './dto/update-player.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { RolesGuard } from '../auth/guard/roles.guard';
 import { Roles } from '../auth/decorator/roles.decorator';
 import { Public } from '../auth/decorator/public.decorator';
-import { RoleType } from '../shared/enum/role-type.enum';
+import { RoleEnum } from '../shared/enum/role-type.enum';
+import { Player } from './domain/player';
 
 @ApiTags('Players')
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller({ path: 'players', version: '1' })
 export class PlayersController {
   constructor(private playersService: PlayersService) { }
 
   @Public()
-  @Post('/')
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({ description: 'Create player.', type: Player })
   async createPlayer(@Body() body: CreatePlayerDTO) {
-    const player = await this.playersService.create(body);
-
-    return PlayerDTO.from(player);
+    return this.playersService.create(body);
   }
 
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'List of players',
-    type: PlayerDTO,
+    description: 'Gets collection of players.',
+    type: Player,
     isArray: true,
   })
+  @Roles(RoleEnum.admin)
   @UseGuards(RolesGuard)
-  @Roles(RoleType.Admin)
-  @Get('/')
+  @Get()
   async getPlayers(@Query() paginationQuery: PaginationQueryDto) {
-    const players = await this.playersService.findAll(paginationQuery);
-
-    return players.map(PlayerDTO.from);
+    return this.playersService.findMany(paginationQuery);
   }
 
   @ApiBearerAuth()
-  @ApiOkResponse({ description: 'Player', type: PlayerDTO })
+  @ApiParam({ name: 'playerId', type: String, required: true })
+  @ApiOkResponse({ description: 'Player', type: Player })
   @UseGuards(RolesGuard)
-  @Roles(RoleType.Admin)
+  @Roles(RoleEnum.admin)
   @Get('/:playerId')
   async getPlayerById(@Param('playerId') playerId: string) {
-    const player = await this.playersService.findById(playerId);
+    const player = this.playersService.findOne({ id: playerId });
 
-    return PlayerDTO.from(player);
+    if (!player) {
+      throw new NotFoundException(`Player with id ${playerId} not found`);
+    }
+
+    return player;
+  }
+
+  @ApiBearerAuth()
+  @ApiParam({ name: 'playerId', type: String, required: true })
+  @Patch('/:playerId')
+  async updatePlayer(@Param('playerId') playerId: string, @Body() body: UpdatePlayerDTO) {
+    return this.playersService.update(playerId, body);
   }
 }

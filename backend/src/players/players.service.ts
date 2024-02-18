@@ -1,65 +1,101 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Player, PlayerModel } from '../database/player.model';
+import { hash } from 'bcrypt';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreatePlayerDTO } from './dto/create-player.dto';
-import { UpdatePlayerDTO } from './dto/update-player.dto';
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { PlayerRepository } from './persistence/repositories/player.repository';
+import { Player } from './domain/player';
+import { IPaginationOptions } from 'src/utils/types/pagination-options';
+import { EntityCondition } from 'src/utils/types/entity-condition.type';
+import { RoleEnum } from 'src/shared/enum/role-type.enum';
 
 @Injectable()
 export class PlayersService {
-  constructor(@InjectModel(Player.name) private playerModel: PlayerModel) {}
+  constructor(private readonly playersRepository: PlayerRepository) { }
 
   async create(body: CreatePlayerDTO): Promise<Player> {
-    const createdPlayer = new this.playerModel(body);
-    const player = await createdPlayer.save();
-    return player;
-  }
 
-  async findByUsername(username: string): Promise<Player> {
-    const player = await this.playerModel
-      .findOne({ username: username })
-      .exec();
+    const clonedPayload = {
+      roles: [RoleEnum.user],
+      stats: {
+        points: 0,
+        coins: 0,
+        exps: 0
+      },
+      tokens: [],
+      challenges: [],
+      ...body
+    };
 
-    if (!player) {
-      throw new NotFoundException(
-        `Player with username: ${username} not found!`,
+    clonedPayload.password = await hash(clonedPayload.password, 12);
+
+    const playerUsernameObject = await this.playersRepository.findOne({ username: clonedPayload.username });
+    if (playerUsernameObject) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            username: 'usernameAlreadyExists',
+          },
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
 
-    return player;
-  }
-
-  async findById(playerId: string): Promise<Player> {
-    const player = await this.playerModel.findById(playerId).exec();
-
-    if (!player) {
-      throw new NotFoundException(
-        `Player with identifier: ${playerId} not found!`,
+    const playerEmailObject = await this.playersRepository.findOne({ email: clonedPayload.email });
+    if (playerEmailObject) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            email: 'emailAlreadyExists',
+          },
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
 
-    return player;
+    return this.playersRepository.create(clonedPayload);
   }
 
-  async findAll(paginationQuery: PaginationQueryDto): Promise<Player[]> {
-    const { limit, offset } = paginationQuery;
-
-    const players = await this.playerModel
-      .find()
-      .skip(offset)
-      .limit(limit)
-      .exec();
-
-    return players;
+  async findMany(paginationOptions: IPaginationOptions): Promise<Player[]> {
+    return this.playersRepository.findMany(paginationOptions);
   }
 
-  async update(username: string, body: UpdatePlayerDTO): Promise<Player> {
-    await this.playerModel
-      .findOneAndUpdate({ username: username }, body)
-      .exec();
-    const updatedPlayer = await this.playerModel
-      .findOne({ username: username })
-      .exec();
+  async findOne(fields: EntityCondition<Player>): Promise<Player | null> {
+    return this.playersRepository.findOne(fields);
+  }
+
+  async update(id: string, body: Partial<Player>): Promise<Player> {
+    const clonedPayload = { ...body };
+
+    if (clonedPayload.username) {
+      const playerUsernameObject = await this.playersRepository.findOne({ username: clonedPayload.username });
+      if (playerUsernameObject) {
+        throw new HttpException(
+          {
+            status: HttpStatus.UNPROCESSABLE_ENTITY,
+            errors: {
+              username: 'usernameAlreadyExists',
+            },
+          },
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+    }
+
+    const updatedPlayer = await this.playersRepository.update(id, clonedPayload);
+
+    if (!updatedPlayer) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          errors: {
+            player: 'notFound',
+          },
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     return updatedPlayer;
   }
 }
