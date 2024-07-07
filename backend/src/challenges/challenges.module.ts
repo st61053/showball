@@ -9,4 +9,4 @@ import { ChallengesPersistenceModule } from './persistance/persistance.module';
   providers: [ChallengesService],
   exports: [ChallengesService, ChallengesPersistenceModule],
 })
-export class ChallengesModule { }
+export class ChallengesModule {}

@@ -9,4 +9,4 @@ import { TokensPersistenceModule } from './persistance/persistance.module';
   providers: [TokensService],
   exports: [TokensService, TokensPersistenceModule],
 })
-export class TokensModule { }
+export class TokensModule {}

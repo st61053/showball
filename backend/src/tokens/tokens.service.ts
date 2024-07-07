@@ -7,24 +7,26 @@ import { EntityCondition } from 'src/utils/types/entity-condition.type';
 
 @Injectable()
 export class TokensService {
-  constructor(private readonly tokensRepository: TokenRepository) { }
+  constructor(private readonly tokensRepository: TokenRepository) {}
 
   async create(body: CreateTokenDto): Promise<Token> {
     const clonedPayload = {
       state: true,
-      ...body
+      ...body,
     };
 
-    const tokenTextIdObject = await this.tokensRepository.findOne({ textId: clonedPayload.textId });
+    const tokenTextIdObject = await this.tokensRepository.findOne({
+      textId: clonedPayload.textId,
+    });
     if (tokenTextIdObject) {
       throw new HttpException(
         {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          status: HttpStatus.BAD_REQUEST,
           errors: {
             textId: 'textIdAlreadyExists',
           },
         },
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -42,7 +44,10 @@ export class TokensService {
   async update(textId: string, body: Partial<Token>): Promise<Token> {
     const clonedPayload = { ...body };
 
-    const updatedToken = await this.tokensRepository.update(textId, clonedPayload);
+    const updatedToken = await this.tokensRepository.update(
+      textId,
+      clonedPayload,
+    );
 
     if (!updatedToken) {
       throw new HttpException(

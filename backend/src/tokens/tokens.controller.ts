@@ -1,8 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+  NotFoundException,
+} from '@nestjs/common';
 import { TokensService } from './tokens.service';
 import { CreateTokenDto } from './dto/create-token.dto';
 import { UpdateTokenDto } from './dto/update-token.dto';
-import { ApiTags, ApiBearerAuth, ApiParam, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiParam,
+  ApiOkResponse,
+  ApiCreatedResponse,
+} from '@nestjs/swagger';
 import { Token } from './domain/token';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Public } from 'src/auth/decorator/public.decorator';
@@ -13,7 +30,7 @@ import { RolesGuard } from 'src/auth/guard/roles.guard';
 @ApiTags('Tokens')
 @Controller({ path: 'tokens', version: '1' })
 export class TokensController {
-  constructor(private readonly tokensService: TokensService) { }
+  constructor(private readonly tokensService: TokensService) {}
 
   @ApiBearerAuth()
   @ApiCreatedResponse({ description: 'Create token.', type: Token })
@@ -54,7 +71,10 @@ export class TokensController {
   @UseGuards(RolesGuard)
   @ApiParam({ name: 'textId', type: String, required: true })
   @Patch(':textId')
-  async update(@Param('textId') textId: string, @Body() updateTokenDto: UpdateTokenDto) {
+  async update(
+    @Param('textId') textId: string,
+    @Body() updateTokenDto: UpdateTokenDto,
+  ) {
     return this.tokensService.update(textId, updateTokenDto);
   }
 

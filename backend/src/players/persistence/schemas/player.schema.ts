@@ -43,7 +43,6 @@ export class ChallengeStatsSchemaClass {
 
 @Schema({ collection: 'players', timestamps: true })
 export class PlayerSchemaClass extends EntityDocumentHelper {
-
   @Prop({ required: true, unique: true })
   email: string;
 
@@ -59,7 +58,11 @@ export class PlayerSchemaClass extends EntityDocumentHelper {
   })
   imageSrc?: string | null;
 
-  @Prop({ type: PlayerStatsSchemaClass, required: true, default: new PlayerStatsSchemaClass() })
+  @Prop({
+    type: PlayerStatsSchemaClass,
+    required: true,
+    default: new PlayerStatsSchemaClass(),
+  })
   stats: PlayerStatsSchemaClass;
 
   @Prop({ type: [TokenStatsSchemaClass] })

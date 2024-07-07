@@ -13,7 +13,13 @@ import {
   ClassSerializerInterceptor,
   NotFoundException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiCreatedResponse, ApiParam } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+  ApiCreatedResponse,
+  ApiParam,
+} from '@nestjs/swagger';
 import { PlayersService } from './players.service';
 import { CreatePlayerDTO } from './dto/create-player.dto';
 import { UpdatePlayerDTO } from './dto/update-player.dto';
@@ -28,15 +34,7 @@ import { Player } from './domain/player';
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller({ path: 'players', version: '1' })
 export class PlayersController {
-  constructor(private playersService: PlayersService) { }
-
-  @Public()
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiCreatedResponse({ description: 'Create player.', type: Player })
-  async createPlayer(@Body() body: CreatePlayerDTO) {
-    return this.playersService.create(body);
-  }
+  constructor(private playersService: PlayersService) {}
 
   @ApiBearerAuth()
   @ApiOkResponse({
@@ -67,10 +65,21 @@ export class PlayersController {
     return player;
   }
 
+  @Public()
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({ description: 'Create player.', type: Player })
+  async createPlayer(@Body() body: CreatePlayerDTO) {
+    return this.playersService.create(body);
+  }
+
   @ApiBearerAuth()
   @ApiParam({ name: 'playerId', type: String, required: true })
   @Patch('/:playerId')
-  async updatePlayer(@Param('playerId') playerId: string, @Body() body: UpdatePlayerDTO) {
+  async updatePlayer(
+    @Param('playerId') playerId: string,
+    @Body() body: UpdatePlayerDTO,
+  ) {
     return this.playersService.update(playerId, body);
   }
 }

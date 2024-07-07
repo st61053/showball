@@ -6,39 +6,39 @@ export type ChallengeSchemaDocument = HydratedDocument<ChallengeSchemaClass>;
 
 @Schema({ collection: 'tokens' })
 export class ChallengeSchemaClass extends EntityDocumentHelper {
+  @Prop({ required: true, index: true, unique: true })
+  textId: string;
 
-    @Prop({ required: true, index: true, unique: true })
-    textId: string;
+  @Prop({ required: true })
+  name: string;
 
-    @Prop({ required: true })
-    name: string;
+  @Prop({ required: true })
+  description: string;
 
-    @Prop({ required: true })
-    description: string;
+  @Prop({
+    type: String,
+    default: null,
+  })
+  imageSrc?: string | null;
 
-    @Prop({
-        type: String,
-        default: null,
-    })
-    imageSrc?: string | null;
+  @Prop({ required: true, default: 0, min: 0 })
+  points: number;
 
-    @Prop({ required: true, default: 0, min: 0 })
-    points: number;
+  @Prop({ required: true, default: 0, min: 0 })
+  coins: number;
 
-    @Prop({ required: true, default: 0, min: 0 })
-    coins: number;
+  @Prop({ required: true, default: 0, min: 0 })
+  exps: number;
 
-    @Prop({ required: true, default: 0, min: 0 })
-    exps: number;
+  @Prop({ required: true })
+  fromDate: Date;
 
-    @Prop({ required: true })
-    fromDate: Date;
+  @Prop({ required: true })
+  toDate: Date;
 
-    @Prop({ required: true })
-    toDate: Date;
-
-    @Prop({ default: true, required: true })
-    state: boolean;
+  @Prop({ default: true, required: true })
+  state: boolean;
 }
 
-export const ChallengeSchema = SchemaFactory.createForClass(ChallengeSchemaClass);
+export const ChallengeSchema =
+  SchemaFactory.createForClass(ChallengeSchemaClass);

@@ -9,47 +9,50 @@ import { RoleEnum } from 'src/shared/enum/role-type.enum';
 
 @Injectable()
 export class PlayersService {
-  constructor(private readonly playersRepository: PlayerRepository) { }
+  constructor(private readonly playersRepository: PlayerRepository) {}
 
   async create(body: CreatePlayerDTO): Promise<Player> {
-
     const clonedPayload = {
       roles: [RoleEnum.user],
       stats: {
         points: 0,
         coins: 0,
-        exps: 0
+        exps: 0,
       },
       tokens: [],
       challenges: [],
-      ...body
+      ...body,
     };
 
     clonedPayload.password = await hash(clonedPayload.password, 12);
 
-    const playerUsernameObject = await this.playersRepository.findOne({ username: clonedPayload.username });
+    const playerUsernameObject = await this.playersRepository.findOne({
+      username: clonedPayload.username,
+    });
     if (playerUsernameObject) {
       throw new HttpException(
         {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          status: HttpStatus.BAD_REQUEST,
           errors: {
             username: 'usernameAlreadyExists',
           },
         },
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
-    const playerEmailObject = await this.playersRepository.findOne({ email: clonedPayload.email });
+    const playerEmailObject = await this.playersRepository.findOne({
+      email: clonedPayload.email,
+    });
     if (playerEmailObject) {
       throw new HttpException(
         {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          status: HttpStatus.BAD_REQUEST,
           errors: {
             email: 'emailAlreadyExists',
           },
         },
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -68,21 +71,26 @@ export class PlayersService {
     const clonedPayload = { ...body };
 
     if (clonedPayload.username) {
-      const playerUsernameObject = await this.playersRepository.findOne({ username: clonedPayload.username });
+      const playerUsernameObject = await this.playersRepository.findOne({
+        username: clonedPayload.username,
+      });
       if (playerUsernameObject) {
         throw new HttpException(
           {
-            status: HttpStatus.UNPROCESSABLE_ENTITY,
+            status: HttpStatus.BAD_REQUEST,
             errors: {
               username: 'usernameAlreadyExists',
             },
           },
-          HttpStatus.UNPROCESSABLE_ENTITY,
+          HttpStatus.BAD_REQUEST,
         );
       }
     }
 
-    const updatedPlayer = await this.playersRepository.update(id, clonedPayload);
+    const updatedPlayer = await this.playersRepository.update(
+      id,
+      clonedPayload,
+    );
 
     if (!updatedPlayer) {
       throw new HttpException(

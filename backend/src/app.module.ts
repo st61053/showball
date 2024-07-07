@@ -39,4 +39,4 @@ import { FilesModule } from './files/files.module';
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}
