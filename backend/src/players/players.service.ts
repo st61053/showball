@@ -19,6 +19,7 @@ export class PlayersService {
         coins: 0,
         exps: 0,
         straight: 0,
+        free_spin: true,
       },
       tokens: [],
       challenges: [],

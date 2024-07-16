@@ -1,4 +1,4 @@
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateStatsDto {
@@ -13,4 +13,8 @@ export class UpdateStatsDto {
   @ApiProperty({ example: 4 })
   @IsNumber()
   exps: number = 0;
+
+  @ApiProperty({ example: false })
+  @IsBoolean()
+  free_spin: boolean = true;
 }

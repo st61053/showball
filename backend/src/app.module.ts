@@ -13,6 +13,8 @@ import configuration from './config/configuration';
 import { MongooseConfigService } from './database/config.service';
 import { FilesModule } from './files/files.module';
 import { LeaderBoardModule } from './leader-board/leader-board.module';
+import { TasksModule } from './tasks/tasks.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { LeaderBoardModule } from './leader-board/leader-board.module';
     MongooseModule.forRootAsync({
       useClass: MongooseConfigService,
     }),
+    ScheduleModule.forRoot(),
 
     // feature module
     AuthModule,
@@ -33,6 +36,7 @@ import { LeaderBoardModule } from './leader-board/leader-board.module';
     TokensModule,
     ChallengesModule,
     FilesModule,
+    TasksModule,
   ],
   providers: [
     {

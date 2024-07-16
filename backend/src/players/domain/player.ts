@@ -7,6 +7,7 @@ export class PlayerStats {
   points: number;
   exps: number;
   straight: number;
+  free_spin: boolean;
 }
 
 export class TokenStats {
@@ -42,7 +43,9 @@ export class Player {
   @ApiProperty({ example: './uploads/profiles/image.png' })
   imageSrc?: string | null;
 
-  @ApiProperty({ example: { coins: 10, points: 15, exps: 6 } })
+  @ApiProperty({
+    example: { coins: 10, points: 15, exps: 6, straight: 0, free_spin: false },
+  })
   stats: PlayerStats;
 
   @ApiProperty({ example: [{ textId: 'kozel', count: 5, level: 1 }] })
@@ -52,7 +55,6 @@ export class Player {
     example: [
       {
         textId: 'hotdog',
-        fulfilled: true,
         timestamp: '2024-07-25T00:00:00.000Z',
       },
     ],

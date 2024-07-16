@@ -18,6 +18,9 @@ export class PlayerStatsSchemaClass {
 
   @Prop({ required: true, default: 0, min: 0 })
   straight: number;
+
+  @Prop({ required: true, default: true })
+  free_spin: boolean;
 }
 
 @Schema({ _id: false })

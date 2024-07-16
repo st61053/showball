@@ -259,6 +259,8 @@ export class ProfileService {
       player.stats.exps += updateStatsDto.exps;
     }
 
+    player.stats.free_spin = player.stats.free_spin && updateStatsDto.free_spin;
+
     return this.playersService.update(player.id, {
       stats: player.stats,
     });

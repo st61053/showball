@@ -20,6 +20,7 @@ export class PlayerMapper {
     playerStats.points = raw.stats.points;
     playerStats.exps = raw.stats.exps;
     playerStats.straight = raw.stats.straight;
+    playerStats.free_spin = raw.stats.free_spin;
 
     player.stats = playerStats;
     player.tokens = raw.tokens.map((token) => ({
@@ -47,6 +48,7 @@ export class PlayerMapper {
     playerStatsDoc.points = player.stats.points;
     playerStatsDoc.exps = player.stats.exps;
     playerStatsDoc.straight = player.stats.straight;
+    playerStatsDoc.free_spin = player.stats.free_spin;
 
     playerDoc.stats = playerStatsDoc;
 
