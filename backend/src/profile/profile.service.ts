@@ -16,7 +16,7 @@ export class ProfileService {
 
   STRAIGHT_COINS = 10;
   STRAIGHT_POINTS = 10;
-  STRAIGHT_EXPS = 10;
+  STRAIGHT_EXPS = 0;
 
   async getProfileById(playerId: string): Promise<Player | null> {
     return this.playersService.findOne({ id: playerId });
@@ -77,7 +77,12 @@ export class ProfileService {
 
     //Straight logic
 
-    if (player.tokens.every((token) => token.count > player.stats.straight)) {
+    const tokens = await this.tokensService.findAll({ page: 1, limit: 0 });
+
+    if (
+      tokens.length === player.tokens.length &&
+      player.tokens.every((token) => token.count > player.stats.straight)
+    ) {
       const minStraight = Math.min(
         ...player.tokens.map((token) => token.count),
       );

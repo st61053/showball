@@ -24,13 +24,11 @@ import { PlayersService } from './players.service';
 import { CreatePlayerDTO } from './dto/create-player.dto';
 import { UpdatePlayerDTO } from './dto/update-player.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
-import { QueryLeaderBoardDTO } from './dto/query-leader-board.dto';
 import { RolesGuard } from '../auth/guard/roles.guard';
 import { Roles } from '../auth/decorator/roles.decorator';
 import { Public } from '../auth/decorator/public.decorator';
 import { RoleEnum } from '../shared/enum/role-type.enum';
 import { Player } from './domain/player';
-import { LeaderBoard } from './domain/leader-board';
 
 @ApiTags('Players')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -84,16 +82,4 @@ export class PlayersController {
   ) {
     return this.playersService.update(playerId, body);
   }
-
-  // @ApiBearerAuth()
-  // @ApiOkResponse({
-  //   description: 'Gets leader board of players.',
-  //   type: LeaderBoard,
-  // })
-  // @Roles(RoleEnum.admin)
-  // @UseGuards(RolesGuard)
-  // @Get('/leader-board')
-  // async getLeaderBoard(@Query() leaderBoardQuery: QueryLeaderBoardDTO) {
-  //   return this.playersService.getLeaderBoard(leaderBoardQuery.target);
-  // }
 }

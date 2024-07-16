@@ -12,6 +12,7 @@ import { ChallengesModule } from './challenges/challenges.module';
 import configuration from './config/configuration';
 import { MongooseConfigService } from './database/config.service';
 import { FilesModule } from './files/files.module';
+import { LeaderBoardModule } from './leader-board/leader-board.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { FilesModule } from './files/files.module';
     // feature module
     AuthModule,
     ProfileModule,
+    LeaderBoardModule,
     PlayersModule,
     TokensModule,
     ChallengesModule,
