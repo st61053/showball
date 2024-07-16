@@ -6,6 +6,7 @@ export class PlayerStats {
   coins: number;
   points: number;
   exps: number;
+  straight: number;
 }
 
 export class TokenStats {
@@ -16,7 +17,6 @@ export class TokenStats {
 
 export class ChallengeStats {
   textId: string;
-  fulfilled: boolean;
   timestamp: Date;
 }
 

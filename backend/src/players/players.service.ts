@@ -3,6 +3,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreatePlayerDTO } from './dto/create-player.dto';
 import { PlayerRepository } from './persistence/repositories/player.repository';
 import { Player } from './domain/player';
+import { LeaderBoard, LeaderBoardRow } from './domain/leader-board';
 import { IPaginationOptions } from 'src/utils/types/pagination-options';
 import { EntityCondition } from 'src/utils/types/entity-condition.type';
 import { RoleEnum } from 'src/shared/enum/role-type.enum';
@@ -18,6 +19,7 @@ export class PlayersService {
         points: 0,
         coins: 0,
         exps: 0,
+        straight: 0,
       },
       tokens: [],
       challenges: [],
@@ -105,5 +107,23 @@ export class PlayersService {
     }
 
     return updatedPlayer;
+  }
+
+  async getLeaderBoard(
+    target: 'coins' | 'points' | 'exps',
+  ): Promise<LeaderBoard> {
+    const players = await this.playersRepository.findMany({
+      limit: 0,
+      page: 1,
+    });
+
+    players.sort((a, b) => b.stats[target] - a.stats[target]);
+
+    const leaderBoardRows: LeaderBoardRow[] = players.map((player) => ({
+      player: player.username,
+      score: player.stats[target],
+    }));
+
+    return { rows: leaderBoardRows };
   }
 }

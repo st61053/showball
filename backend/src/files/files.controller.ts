@@ -25,7 +25,6 @@ export class FilesController {
     @Request() req,
     @UploadedFile() profileImage: Express.Multer.File,
   ) {
-    console.log(profileImage);
     await this.fileServices.updateProfileImage(req.user.playerId, profileImage);
   }
 
@@ -38,7 +37,18 @@ export class FilesController {
     @Param('textId') textId: string,
     @UploadedFile() tokenImage: Express.Multer.File,
   ) {
-    console.log(tokenImage);
     await this.fileServices.updateTokenImage(textId, tokenImage);
+  }
+
+  @Roles(RoleEnum.admin)
+  @UseGuards(RolesGuard)
+  @Post('/challenge-image/:textId')
+  @ApiFile('challengeImage', true)
+  @ApiParam({ name: 'textId', type: String, required: true })
+  async uploadChallengeImage(
+    @Param('textId') textId: string,
+    @UploadedFile() challengeImage: Express.Multer.File,
+  ) {
+    await this.fileServices.updateChallengeImage(textId, challengeImage);
   }
 }

@@ -4,7 +4,7 @@ import { EntityDocumentHelper } from 'src/utils/document-entity-helper';
 
 export type ChallengeSchemaDocument = HydratedDocument<ChallengeSchemaClass>;
 
-@Schema({ collection: 'tokens' })
+@Schema({ collection: 'challenges' })
 export class ChallengeSchemaClass extends EntityDocumentHelper {
   @Prop({ required: true, index: true, unique: true })
   textId: string;

@@ -9,11 +9,13 @@ import { FilesService } from './files.service';
 import { PlayersModule } from 'src/players/players.module';
 import { FilesController } from './files.controller';
 import { TokensModule } from 'src/tokens/tokens.module';
+import { ChallengesModule } from 'src/challenges/challenges.module';
 
 @Module({
   imports: [
     PlayersModule,
     TokensModule,
+    ChallengesModule,
     MulterModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

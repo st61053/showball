@@ -19,6 +19,7 @@ export class PlayerMapper {
     playerStats.coins = raw.stats.coins;
     playerStats.points = raw.stats.points;
     playerStats.exps = raw.stats.exps;
+    playerStats.straight = raw.stats.straight;
 
     player.stats = playerStats;
     player.tokens = raw.tokens.map((token) => ({
@@ -28,7 +29,6 @@ export class PlayerMapper {
     }));
     player.challenges = raw.challenges.map((challenge) => ({
       textId: challenge.textId,
-      fulfilled: challenge.fulfilled,
       timestamp: challenge.timestamp,
     }));
     return player;
@@ -46,6 +46,7 @@ export class PlayerMapper {
     playerStatsDoc.coins = player.stats.coins;
     playerStatsDoc.points = player.stats.points;
     playerStatsDoc.exps = player.stats.exps;
+    playerStatsDoc.straight = player.stats.straight;
 
     playerDoc.stats = playerStatsDoc;
 
@@ -56,7 +57,6 @@ export class PlayerMapper {
     }));
     playerDoc.challenges = player.challenges.map((challenge) => ({
       textId: challenge.textId,
-      fulfilled: challenge.fulfilled,
       timestamp: challenge.timestamp,
     }));
     return playerDoc;

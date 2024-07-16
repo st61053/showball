@@ -15,6 +15,9 @@ export class PlayerStatsSchemaClass {
 
   @Prop({ required: true, default: 0, min: 0 })
   exps: number;
+
+  @Prop({ required: true, default: 0, min: 0 })
+  straight: number;
 }
 
 @Schema({ _id: false })
@@ -33,9 +36,6 @@ export class TokenStatsSchemaClass {
 export class ChallengeStatsSchemaClass {
   @Prop({ required: true })
   textId: string;
-
-  @Prop()
-  fulfilled: boolean;
 
   @Prop()
   timestamp: Date;

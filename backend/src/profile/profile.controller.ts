@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Request,
+} from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import {
   ApiTags,
@@ -7,6 +15,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { Player } from 'src/players/domain/player';
+import { UpdateStatsDto } from './dto/update-stats.dto';
 
 @ApiBearerAuth()
 @ApiTags('Profile')
@@ -54,5 +63,10 @@ export class ProfileController {
   @Post('/upgrade-token/:textId')
   async upgradeToken(@Request() req, @Param('textId') textId: string) {
     return this.profileServices.upgradeToken(req.user.playerId, textId);
+  }
+
+  @Patch('/stats')
+  async updateStats(@Request() req, @Body() body: UpdateStatsDto) {
+    return this.profileServices.updateStats(req.user.playerId, body);
   }
 }

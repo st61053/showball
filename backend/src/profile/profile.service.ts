@@ -4,6 +4,7 @@ import { TokensService } from 'src/tokens/tokens.service';
 import { ChallengesService } from 'src/challenges/challenges.service';
 import { Player } from 'src/players/domain/player';
 import { assert } from 'console';
+import { UpdateStatsDto } from './dto/update-stats.dto';
 
 @Injectable()
 export class ProfileService {
@@ -12,6 +13,10 @@ export class ProfileService {
     private tokensService: TokensService,
     private challengesService: ChallengesService,
   ) {}
+
+  STRAIGHT_COINS = 10;
+  STRAIGHT_POINTS = 10;
+  STRAIGHT_EXPS = 10;
 
   async getProfileById(playerId: string): Promise<Player | null> {
     return this.playersService.findOne({ id: playerId });
@@ -22,7 +27,6 @@ export class ProfileService {
     tokenTextId: string,
   ): Promise<Player | null> {
     const player = await this.playersService.findOne({ id: playerId });
-
     assert(player, 'Player not found');
 
     const token = await this.tokensService.findOne({ textId: tokenTextId });
@@ -70,6 +74,21 @@ export class ProfileService {
     player.stats.coins += token.levels[tokenLevel - 1].coins;
     player.stats.points += token.levels[tokenLevel - 1].points;
     player.stats.exps += token.levels[tokenLevel - 1].exps;
+
+    //Straight logic
+
+    if (player.tokens.every((token) => token.count > player.stats.straight)) {
+      const minStraight = Math.min(
+        ...player.tokens.map((token) => token.count),
+      );
+
+      const straightDiv = minStraight - player.stats.straight;
+
+      player.stats.coins += straightDiv * this.STRAIGHT_COINS;
+      player.stats.points += straightDiv * this.STRAIGHT_POINTS;
+      player.stats.exps += straightDiv * this.STRAIGHT_EXPS;
+      player.stats.straight = minStraight;
+    }
 
     return this.playersService.update(player.id, {
       tokens: player.tokens,
@@ -154,8 +173,89 @@ export class ProfileService {
   ): Promise<Player | null> {
     const player = await this.playersService.findOne({ id: playerId });
 
-    // TODO: Implement the meetChallenge method
+    const challenge = await this.challengesService.findOne({
+      textId: challengeTextId,
+    });
 
-    return player;
+    if (!challenge) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          errors: {
+            token: 'notFound',
+          },
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const now = new Date();
+
+    if (challenge.fromDate > now || challenge.toDate < now) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          errors: {
+            token: 'notActiveChallenge',
+          },
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    if (
+      !player.challenges.find(
+        (challenge) => challenge.textId == challenge.textId,
+      )
+    ) {
+      player.challenges.push({
+        textId: challengeTextId,
+        timestamp: now,
+      });
+
+      player.stats.coins += challenge.coins;
+      player.stats.points += challenge.points;
+      player.stats.exps += challenge.exps;
+    } else {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          errors: {
+            token: 'challengeAlreadyMet',
+          },
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+    return this.playersService.update(player.id, {
+      challenges: player.challenges,
+      stats: player.stats,
+    });
+  }
+
+  async updateStats(playerId: string, updateStatsDto: UpdateStatsDto) {
+    const player = await this.playersService.findOne({ id: playerId });
+
+    if (player.stats.coins + updateStatsDto.coins < 0) {
+      player.stats.coins = 0;
+    } else {
+      player.stats.coins += updateStatsDto.coins;
+    }
+
+    if (player.stats.points + updateStatsDto.points < 0) {
+      player.stats.points = 0;
+    } else {
+      player.stats.points += updateStatsDto.points;
+    }
+
+    if (player.stats.exps + updateStatsDto.exps < 0) {
+      player.stats.exps = 0;
+    } else {
+      player.stats.exps += updateStatsDto.exps;
+    }
+
+    return this.playersService.update(player.id, {
+      stats: player.stats,
+    });
   }
 }
