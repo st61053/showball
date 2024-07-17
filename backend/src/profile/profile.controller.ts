@@ -78,4 +78,9 @@ export class ProfileController {
   async updateStats(@Request() req, @Body() body: UpdateStatsDto) {
     return this.profileServices.updateStats(req.user.playerId, body);
   }
+
+  @Post('/spin-wheel')
+  async spinWheel(@Request() req) {
+    return this.profileServices.spinWheel(req.user.playerId);
+  }
 }

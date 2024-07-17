@@ -17,6 +17,7 @@ export class ProfileService {
   STRAIGHT_COINS = 10;
   STRAIGHT_POINTS = 10;
   STRAIGHT_EXPS = 0;
+  WHEEL_SPIN_COST = 5;
 
   async getProfileById(playerId: string): Promise<Player | null> {
     return this.playersService.findOne({ id: playerId });
@@ -271,6 +272,32 @@ export class ProfileService {
 
     if (updateStatsDto.free_spin !== null) {
       player.stats.free_spin = updateStatsDto.free_spin;
+    }
+
+    return this.playersService.update(player.id, {
+      stats: player.stats,
+    });
+  }
+
+  async spinWheel(playerId: string) {
+    const player = await this.playersService.findOne({ id: playerId });
+
+    if (player.stats.free_spin) {
+      player.stats.free_spin = false;
+    } else {
+      if (player.stats.coins < this.WHEEL_SPIN_COST) {
+        throw new HttpException(
+          {
+            status: HttpStatus.CONFLICT,
+            errors: {
+              coins: 'notEnoughCoins',
+            },
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      player.stats.coins -= this.WHEEL_SPIN_COST;
     }
 
     return this.playersService.update(player.id, {
