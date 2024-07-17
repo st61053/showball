@@ -104,6 +104,7 @@ export class ProfileService {
   async upgradeToken(
     playerId: string,
     tokenTextId: string,
+    free: boolean,
   ): Promise<Player | null> {
     const player = await this.playersService.findOne({ id: playerId });
 
@@ -151,19 +152,22 @@ export class ProfileService {
 
     const tokenLevel = Math.min(playerTokenStats.level, token.levels.length);
 
-    if (player.stats.coins < token.levels[tokenLevel - 1].nextLevelCost) {
-      throw new HttpException(
-        {
-          status: HttpStatus.CONFLICT,
-          errors: {
-            coins: 'notEnoughCoins',
+    if (!free) {
+      if (player.stats.coins < token.levels[tokenLevel - 1].nextLevelCost) {
+        throw new HttpException(
+          {
+            status: HttpStatus.CONFLICT,
+            errors: {
+              coins: 'notEnoughCoins',
+            },
           },
-        },
-        HttpStatus.CONFLICT,
-      );
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      player.stats.coins -= token.levels[tokenLevel - 1].nextLevelCost;
     }
 
-    player.stats.coins -= token.levels[tokenLevel - 1].nextLevelCost;
     playerTokenStats.level++;
 
     return this.playersService.update(player.id, {

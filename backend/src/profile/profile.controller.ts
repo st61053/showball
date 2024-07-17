@@ -16,6 +16,7 @@ import {
 } from '@nestjs/swagger';
 import { Player } from 'src/players/domain/player';
 import { UpdateStatsDto } from './dto/update-stats.dto';
+import { UpgradeTokensDto } from './dto/upgrade-token.dto';
 
 @ApiBearerAuth()
 @ApiTags('Profile')
@@ -61,8 +62,16 @@ export class ProfileController {
     required: true,
   })
   @Post('/upgrade-token/:textId')
-  async upgradeToken(@Request() req, @Param('textId') textId: string) {
-    return this.profileServices.upgradeToken(req.user.playerId, textId);
+  async upgradeToken(
+    @Request() req,
+    @Param('textId') textId: string,
+    @Body() body: UpgradeTokensDto,
+  ) {
+    return this.profileServices.upgradeToken(
+      req.user.playerId,
+      textId,
+      body.free,
+    );
   }
 
   @Patch('/stats')
