@@ -1,0 +1,1331 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/api/v1/auth/login": {
+            "post": {
+                "operationId": "AuthController_login",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccessTokenDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Auth"
+                ]
+            }
+        },
+        "/api/v1/players": {
+            "get": {
+                "operationId": "PlayersController_getPlayers",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Gets collection of players.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Player"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Players"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "operationId": "PlayersController_createPlayer",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreatePlayerDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create player.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Player"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Players"
+                ]
+            }
+        },
+        "/api/v1/players/{playerId}": {
+            "get": {
+                "operationId": "PlayersController_getPlayerById",
+                "parameters": [
+                    {
+                        "name": "playerId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Player",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Player"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Players"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "patch": {
+                "operationId": "PlayersController_updatePlayer",
+                "parameters": [
+                    {
+                        "name": "playerId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdatePlayerDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Players"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile": {
+            "get": {
+                "operationId": "ProfileController_getPlayerProfile",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Gets profile of logged player.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Player"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/show-token/{textId}": {
+            "post": {
+                "operationId": "ProfileController_showToken",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Token text identifier.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/meet-challenge/{textId}": {
+            "post": {
+                "operationId": "ProfileController_meetChallenge",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Challenge text identifier.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/upgrade-token/{textId}": {
+            "post": {
+                "operationId": "ProfileController_upgradeToken",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Token text identifier.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/stats": {
+            "patch": {
+                "operationId": "ProfileController_updateStats",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateStatsDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/tokens": {
+            "post": {
+                "operationId": "TokensController_create",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateTokenDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create token.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Token"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Tokens"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "TokensController_findAll",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Gets collection of tokens.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Token"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Tokens"
+                ]
+            }
+        },
+        "/api/v1/tokens/{textId}": {
+            "get": {
+                "operationId": "TokensController_findOne",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Token"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Tokens"
+                ]
+            },
+            "patch": {
+                "operationId": "TokensController_update",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateTokenDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Tokens"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "TokensController_remove",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Tokens"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/challenges": {
+            "post": {
+                "operationId": "ChallengesController_create",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateChallengeDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create challenge.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Challenge"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Challenges"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "ChallengesController_findAll",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Gets collection of challenges.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Challenge"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Challenges"
+                ]
+            }
+        },
+        "/api/v1/challenges/{textId}": {
+            "get": {
+                "operationId": "ChallengesController_findOne",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Challenge",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Challenge"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Challenges"
+                ]
+            },
+            "patch": {
+                "operationId": "ChallengesController_update",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateChallengeDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Challenges"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "ChallengesController_remove",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Challenges"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/leader-board": {
+            "get": {
+                "operationId": "LeaderBoardController_getLeaderBoard",
+                "parameters": [
+                    {
+                        "name": "target",
+                        "required": true,
+                        "in": "query",
+                        "example": "points",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Gets leader board of players.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LeaderBoard"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Leader Board"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/files/profile-image": {
+            "post": {
+                "operationId": "FilesController_uploadProfileImage",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "profileImage"
+                                ],
+                                "properties": {
+                                    "profileImage": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Files"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/files/token-image/{textId}": {
+            "post": {
+                "operationId": "FilesController_uploadTokenImage",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "tokenImage"
+                                ],
+                                "properties": {
+                                    "tokenImage": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Files"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/files/challenge-image/{textId}": {
+            "post": {
+                "operationId": "FilesController_uploadChallengeImage",
+                "parameters": [
+                    {
+                        "name": "textId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "challengeImage"
+                                ],
+                                "properties": {
+                                    "challengeImage": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Files"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "SHOWBALL",
+        "description": "Some description.",
+        "version": "1.0",
+        "contact": {}
+    },
+    "tags": [],
+    "servers": [],
+    "components": {
+        "securitySchemes": {
+            "bearer": {
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "type": "http"
+            }
+        },
+        "schemas": {
+            "LoginDTO": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "example": "username"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    }
+                },
+                "required": [
+                    "username",
+                    "password"
+                ]
+            },
+            "AccessTokenDTO": {
+                "type": "object",
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "example": "access-token"
+                    }
+                },
+                "required": [
+                    "access_token"
+                ]
+            },
+            "PlayerStats": {
+                "type": "object",
+                "properties": {}
+            },
+            "Player": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "5f7a1c1e9b5f1f1d2c5d9c3b"
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "username"
+                    },
+                    "roles": {
+                        "example": [
+                            "user"
+                        ],
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "titles": {
+                        "example": [
+                            "greenhorn"
+                        ],
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "imageSrc": {
+                        "type": "string",
+                        "example": "./uploads/profiles/image.png"
+                    },
+                    "stats": {
+                        "example": {
+                            "coins": 10,
+                            "points": 15,
+                            "exps": 6,
+                            "straight": 0,
+                            "free_spin": false
+                        },
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PlayerStats"
+                            }
+                        ]
+                    },
+                    "tokens": {
+                        "example": [
+                            {
+                                "textId": "kozel",
+                                "count": 5,
+                                "level": 1
+                            }
+                        ],
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "challenges": {
+                        "example": [
+                            {
+                                "textId": "hotdog",
+                                "timestamp": "2024-07-25T00:00:00.000Z"
+                            }
+                        ],
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "id",
+                    "username",
+                    "roles",
+                    "titles",
+                    "imageSrc",
+                    "stats",
+                    "tokens",
+                    "challenges"
+                ]
+            },
+            "CreatePlayerDTO": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "example": "username"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "username@gmail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "secret-password"
+                    },
+                    "titles": {
+                        "example": [
+                            "greenhorn"
+                        ],
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "username",
+                    "email",
+                    "password",
+                    "titles"
+                ]
+            },
+            "UpdatePlayerDTO": {
+                "type": "object",
+                "properties": {}
+            },
+            "UpdateStatsDto": {
+                "type": "object",
+                "properties": {
+                    "points": {
+                        "type": "number",
+                        "example": 7
+                    },
+                    "coins": {
+                        "type": "number",
+                        "example": -3
+                    },
+                    "exps": {
+                        "type": "number",
+                        "example": 4
+                    },
+                    "free_spin": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                },
+                "required": [
+                    "points",
+                    "coins",
+                    "exps",
+                    "free_spin"
+                ]
+            },
+            "CreateTokenDto": {
+                "type": "object",
+                "properties": {
+                    "textId": {
+                        "type": "string",
+                        "example": "kozel"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Kozel"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "This is a token description"
+                    },
+                    "levels": {
+                        "example": [
+                            {
+                                "points": 1,
+                                "coins": 1,
+                                "exps": 1,
+                                "nextLevelCost": 1
+                            }
+                        ],
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "maxLevel": {
+                        "type": "number",
+                        "example": 3
+                    }
+                },
+                "required": [
+                    "textId",
+                    "name",
+                    "description",
+                    "levels",
+                    "maxLevel"
+                ]
+            },
+            "Token": {
+                "type": "object",
+                "properties": {
+                    "textId": {
+                        "type": "string",
+                        "example": "kozel"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Kozel"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Kozel is a beer."
+                    },
+                    "imageSrc": {
+                        "type": "string",
+                        "example": "./uploads/tokens/kozel.png"
+                    },
+                    "levels": {
+                        "example": [
+                            {
+                                "coins": 10,
+                                "points": 15,
+                                "exps": 6,
+                                "nextLevelCost": 100
+                            }
+                        ],
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "maxLevel": {
+                        "type": "number",
+                        "example": 3
+                    },
+                    "state": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "required": [
+                    "textId",
+                    "name",
+                    "description",
+                    "imageSrc",
+                    "levels",
+                    "maxLevel",
+                    "state"
+                ]
+            },
+            "UpdateTokenDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Kozel"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "This is a token description"
+                    },
+                    "levels": {
+                        "example": [
+                            {
+                                "points": 1,
+                                "coins": 1,
+                                "exps": 1,
+                                "nextLevelCost": 1
+                            }
+                        ],
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "maxLevel": {
+                        "type": "number",
+                        "example": 3
+                    },
+                    "state": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "required": [
+                    "state"
+                ]
+            },
+            "CreateChallengeDto": {
+                "type": "object",
+                "properties": {
+                    "textId": {
+                        "type": "string",
+                        "example": "velitel_nocni_hlidky"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Velitel noční hlídky"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Very funny description."
+                    },
+                    "points": {
+                        "type": "number",
+                        "example": 10
+                    },
+                    "coins": {
+                        "type": "number",
+                        "example": 15
+                    },
+                    "exps": {
+                        "type": "number",
+                        "example": 6
+                    },
+                    "fromDate": {
+                        "format": "date-time",
+                        "type": "string",
+                        "example": "2024-07-21T00:00:00.000Z"
+                    },
+                    "toDate": {
+                        "format": "date-time",
+                        "type": "string",
+                        "example": "2024-07-25T00:00:00.000Z"
+                    }
+                },
+                "required": [
+                    "textId",
+                    "name",
+                    "description",
+                    "points",
+                    "coins",
+                    "exps",
+                    "fromDate",
+                    "toDate"
+                ]
+            },
+            "Challenge": {
+                "type": "object",
+                "properties": {
+                    "textId": {
+                        "type": "string",
+                        "example": "ututatise"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Ututatise"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Ututatise is a beer."
+                    },
+                    "imageSrc": {
+                        "type": "string",
+                        "example": "./uploads/challenges/ututatise.png"
+                    },
+                    "points": {
+                        "type": "number",
+                        "example": 10
+                    },
+                    "coins": {
+                        "type": "number",
+                        "example": 15
+                    },
+                    "exps": {
+                        "type": "number",
+                        "example": 6
+                    },
+                    "fromDate": {
+                        "format": "date-time",
+                        "type": "string",
+                        "example": "2024-07-21T00:00:00.000Z"
+                    },
+                    "toDate": {
+                        "format": "date-time",
+                        "type": "string",
+                        "example": "2024-07-25T00:00:00.000Z"
+                    },
+                    "state": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "required": [
+                    "textId",
+                    "name",
+                    "description",
+                    "imageSrc",
+                    "points",
+                    "coins",
+                    "exps",
+                    "fromDate",
+                    "toDate",
+                    "state"
+                ]
+            },
+            "UpdateChallengeDto": {
+                "type": "object",
+                "properties": {
+                    "textId": {
+                        "type": "string",
+                        "example": "velitel_nocni_hlidky"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Velitel noční hlídky"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Very funny description."
+                    },
+                    "points": {
+                        "type": "number",
+                        "example": 10
+                    },
+                    "coins": {
+                        "type": "number",
+                        "example": 15
+                    },
+                    "exps": {
+                        "type": "number",
+                        "example": 6
+                    },
+                    "fromDate": {
+                        "format": "date-time",
+                        "type": "string",
+                        "example": "2024-07-21T00:00:00.000Z"
+                    },
+                    "toDate": {
+                        "format": "date-time",
+                        "type": "string",
+                        "example": "2024-07-25T00:00:00.000Z"
+                    },
+                    "state": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "required": [
+                    "state"
+                ]
+            },
+            "LeaderBoard": {
+                "type": "object",
+                "properties": {
+                    "rows": {
+                        "example": [
+                            {
+                                "player": "player-username",
+                                "score": 125
+                            }
+                        ],
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "rows"
+                ]
+            }
+        }
+    }
+}
