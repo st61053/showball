@@ -7,7 +7,7 @@ db.tokens.insertMany([
     textId: "slimak",
     name: "Slimák",
     description: "",
-    imageSrc: "uploads/slimak.png",
+    imageSrc: "uploads/tokens/slimak.png",
     levels: [
       {
         coins: 1,
@@ -47,7 +47,7 @@ db.tokens.insertMany([
     textId: "krtek",
     name: "Krtek",
     description: "",
-    imageSrc: "uploads/krtek.png",
+    imageSrc: "uploads/tokens/krtek.png",
     levels: [
       {
         coins: 1,
@@ -87,7 +87,7 @@ db.tokens.insertMany([
     textId: "mozek",
     name: "Mozek",
     description: "",
-    imageSrc: "uploads/mozek.png",
+    imageSrc: "uploads/tokens/mozek.png",
     levels: [
       {
         coins: 2,
@@ -127,7 +127,7 @@ db.tokens.insertMany([
     textId: "laso",
     name: "Laso",
     description: "",
-    imageSrc: "uploads/laso.png",
+    imageSrc: "uploads/tokens/laso.png",
     levels: [
       {
         coins: 3,
@@ -167,7 +167,7 @@ db.tokens.insertMany([
     textId: "slon",
     name: "Slon",
     description: "",
-    imageSrc: "uploads/slon.png",
+    imageSrc: "uploads/tokens/slon.png",
     levels: [
       {
         coins: 4,
@@ -207,7 +207,7 @@ db.tokens.insertMany([
     textId: "netopyr",
     name: "Netopýr",
     description: "",
-    imageSrc: "uploads/netopyr.png",
+    imageSrc: "uploads/tokens/netopyr.png",
     levels: [
       {
         coins: 4,
@@ -247,7 +247,7 @@ db.tokens.insertMany([
     textId: "kozel",
     name: "Kozel",
     description: "",
-    imageSrc: "uploads/kozel.png",
+    imageSrc: "uploads/tokens/kozel.png",
     levels: [
       {
         coins: 3,
@@ -287,7 +287,7 @@ db.tokens.insertMany([
     textId: "kanon",
     name: "Kanón",
     description: "",
-    imageSrc: "uploads/kanon.png",
+    imageSrc: "uploads/tokens/kanon.png",
     levels: [
       {
         coins: 6,
@@ -327,7 +327,7 @@ db.tokens.insertMany([
     textId: "moucha",
     name: "Moucha",
     description: "",
-    imageSrc: "uploads/moucha.png",
+    imageSrc: "uploads/tokens/moucha.png",
     levels: [
       {
         coins: 3,
@@ -367,7 +367,7 @@ db.tokens.insertMany([
     textId: "hodinky",
     name: "Hodinky",
     description: "",
-    imageSrc: "uploads/hodinky.png",
+    imageSrc: "uploads/tokens/hodinky.png",
     levels: [
       {
         coins: 3,
