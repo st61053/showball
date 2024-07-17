@@ -1,15 +1,1 @@
-**/.git
-**/.gitignore
-**/.vscode
-**/coverage
-**/.env
-**/.env.example
-**/.aws
-**/.ssh
-Dockerfile
-README.md
-
-.mypy_cache
-.pytest_cache
-
-**/.venv
+**/node_modules/

@@ -14,7 +14,7 @@ const Store = () => {
     const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
     const SELECTED_TOKEN = useSelector((state: GlobalState) => state.store.selectedToken);
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
-    const TOKEN = LOGIN_PLAYER.tokens.find((token) => token.tokenId === SELECTED_TOKEN?.id);
+    const TOKEN = LOGIN_PLAYER.tokens.find((token) => token.textId === SELECTED_TOKEN?.textId);
     const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
 
@@ -24,13 +24,13 @@ const Store = () => {
     const upgradeToken = async () => {
         if (localStorage.access_token) {
 
-            const response = await fetch(`${SEVER_PREFIX}/api/v1/upgrade-token`, {
+            const response = await fetch(`${SEVER_PREFIX}/api/v1/profile/upgrade-token/${SELECTED_TOKEN?.textId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
                 },
-                body: JSON.stringify({ token_id: SELECTED_TOKEN?.id, free: false })
+                // body: JSON.stringify({ token_id: SELECTED_TOKEN?.textId, free: false })
             })
 
             const json = await response.json();
@@ -123,20 +123,21 @@ const Store = () => {
                     }}
                     disabled={
                         !Boolean(SELECTED_TOKEN) 
-                        || Boolean(TOKEN && SELECTED_TOKEN && SELECTED_TOKEN?.upgrades[TOKEN?.upgrade] > LOGIN_PLAYER.stats.coins)
-                        || Boolean(TOKEN && TOKEN?.upgrade > 2)
+                        || Boolean(SELECTED_TOKEN && SELECTED_TOKEN?.levels[TOKEN?.level ? TOKEN?.level - 1 : 0].nextLevelCost > LOGIN_PLAYER.stats.coins)
+                        || Boolean(TOKEN?.level > 3)
                     }
                     onClick={() => upgradeToken()}
                 >
 
                     {
-                        TOKEN
-                            ? <Typography> {TOKEN?.upgrade < 3 ? "Vylepšit!" : "Max vylepšení!"} </Typography>
-                            : <Typography> {"Vylepšit!"} </Typography>
+                        !TOKEN
+                            ? <Typography> {"Vylepšit!"} </Typography>
+                            : <Typography> {TOKEN?.level < 4 ? "Vylepšit!" : "Max vylepšení!"} </Typography>
+                            
                     }
-                    {TOKEN && SELECTED_TOKEN && TOKEN?.upgrade < 3 && <Typography>{`(`}</Typography>}
-                    {TOKEN && SELECTED_TOKEN && TOKEN?.upgrade < 3 && <StatItem count={SELECTED_TOKEN?.upgrades[TOKEN?.upgrade]} img={coin} />}
-                    {TOKEN && SELECTED_TOKEN && TOKEN?.upgrade < 3 && <Typography>{`)`}</Typography>}
+                    {SELECTED_TOKEN && (TOKEN?.level ?? 1) < 4 && <Typography>{`(`}</Typography>}
+                    {SELECTED_TOKEN && (TOKEN?.level ?? 1) < 4 && <StatItem count={SELECTED_TOKEN?.levels[TOKEN?.level ? TOKEN?.level - 1 : 0].nextLevelCost} img={coin} />}
+                    {SELECTED_TOKEN && (TOKEN?.level ?? 1) < 4 && <Typography>{`)`}</Typography>}
                 </Button>
             </Box>
         </Box >

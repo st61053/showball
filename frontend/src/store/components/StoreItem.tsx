@@ -12,27 +12,29 @@ const StoreItem = ({ token }: { token: IToken }) => {
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
     const SELECTED_TOKEN = useSelector((state: GlobalState) => state.store.selectedToken);
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
-    const TOKEN = LOGIN_PLAYER.tokens.find((tok) => tok.tokenId === token.id);
+    const TOKEN = LOGIN_PLAYER.tokens.find((tok) => tok.textId === token.textId);
 
     const theme = useTheme();
     return (
         <>
-            {TOKEN && <Card
+            <Card
                 sx={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     p: 0.5,
                     gap: 1,
-                    outline: SELECTED_TOKEN?.id === token.id ? `2px solid ${theme.palette.primary.main}` : ""
+                    outline: SELECTED_TOKEN?.textId === token.textId ? `2px solid ${theme.palette.primary.main}` : ""
                 }}
                 onClick={() => dispatch(changeSelectedToken(token))}
             >
                 <Token token={token} width={65} />
+                {!TOKEN
+                    ? <Coin count={TOKEN ? token.levels[TOKEN?.level ? TOKEN?.level - 1 : 0].nextLevelCost : token.levels[0].nextLevelCost} />
+                    :
 
-                {
-                    TOKEN.upgrade < 3 
-                    ? <Coin count={token.upgrades[TOKEN.upgrade]} /> :
+                    TOKEN?.level < 4
+                        ? <Coin count={TOKEN ? token.levels[TOKEN?.level ? TOKEN?.level - 1 : 0].nextLevelCost : token.levels[0].nextLevelCost} /> :
                         <Typography
                             variant="subtitle2"
                             sx={{
@@ -42,9 +44,12 @@ const StoreItem = ({ token }: { token: IToken }) => {
                         >
                             max
                         </Typography>
+
                 }
 
-            </Card>}
+
+
+            </Card>
         </>
 
     );

@@ -12,19 +12,20 @@ const TokenController = () => {
     const SELECTED_TOKEN = useSelector((state: GlobalState) => state.tokens.selectedToken);
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
     const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
+    const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
 
 
     const showToken = async () => {
 
         if (localStorage.access_token) {
-            const response = await fetch(`${SEVER_PREFIX}/api/v1/show-token`, {
+            const response = await fetch(`${SEVER_PREFIX}/api/v1/profile/show-token/${SELECTED_TOKEN?.textId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
                 },
-                body: JSON.stringify({token_id: SELECTED_TOKEN?.id})
+                // body: JSON.stringify({token_id: SELECTED_TOKEN?.textId})
             })
 
             const json = await response.json();
@@ -57,7 +58,7 @@ const TokenController = () => {
                         justifyContent: "space-between"
                     }}
                 >
-                    {LOGIN_PLAYER.tokens?.map((token, index) =>
+                    {TOKENS?.map((token, index) =>
                         <TokenCounter token={token} key={index} />
                     )}
 

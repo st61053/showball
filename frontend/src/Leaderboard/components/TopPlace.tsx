@@ -53,7 +53,7 @@ const TopPlace = ({ width, player }: { width: number, player: IPlayer }) => {
                     fontWeight: "bold",
                 }}
             >
-                {player ? player?.name : "Player"}
+                {player ? player?.username : "Player"}
             </Typography>
 
 

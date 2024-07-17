@@ -22,7 +22,7 @@ function App() {
       const json = await response.json();
 
       if (response.ok) {
-        dispatch(loadTokens(json.tokens))
+        dispatch(loadTokens(json))
       }
     };
 

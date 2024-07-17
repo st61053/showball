@@ -52,7 +52,7 @@ const Profile = () => {
         setTokenParticles(
             LOGIN_PLAYER.tokens.reduce((prev, token, index) => {
                 for (let i = 0; i < token.count; i++) {
-                    prev.push({ src: TOKENS_IMAGE_LIST[token.tokenId] })
+                    prev.push({ src: TOKENS_IMAGE_LIST[token.textId] })
                 }
                 return prev;
             }, [] as any)
@@ -62,7 +62,7 @@ const Profile = () => {
     useEffect(() => {
         const getPlayer = async () => {
 
-            const response = await fetch(`${SEVER_PREFIX}/api/v1/player`, {
+            const response = await fetch(`${SEVER_PREFIX}/api/v1/profile`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -102,10 +102,10 @@ const Profile = () => {
         };
 
         const STAT_LIST: StatListType = {
-            0: <StatItem flexDirection="column" count={LOGIN_PLAYER?.stats.strike || 0} img={fire} />,
-            1: <StatItem flexDirection="column" count={
-                LOGIN_PLAYER.tokens.reduce((prev, token) => token.straight ? prev + 1 : prev, 0)
-            } img={straight} />,
+            // 0: <StatItem flexDirection="column" count={LOGIN_PLAYER?.stats.strike || 0} img={fire} />,
+            // 1: <StatItem flexDirection="column" count={
+            //     LOGIN_PLAYER.tokens.reduce((prev, token) => token.straight ? prev + 1 : prev, 0)
+            // } img={straight} />,
             2: <StatItem flexDirection="column" count={LOGIN_PLAYER?.stats.points || 0} img={logo} />,
             3: <StatItem flexDirection="column" count={LOGIN_PLAYER?.stats.coins || 0} img={coin} />,
         }
@@ -210,7 +210,7 @@ const Profile = () => {
                     }}
 
                 >
-                    <ProfileImage img={PLAYER_IMAGE_LIST[LOGIN_PLAYER.id]} width={250} />
+                    <ProfileImage img={LOGIN_PLAYER?.imageSrc ?? PLAYER_IMAGE_LIST["placeholder"]} width={250} />
                     {renderStatItems()}
                 </Box>
 
@@ -234,7 +234,7 @@ const Profile = () => {
                             fontWeight: "bold",
                         }}
                     >
-                        {LOGIN_PLAYER.name}
+                        {LOGIN_PLAYER.username}
                     </Typography>
 
                     {/* Player Title */}

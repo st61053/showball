@@ -40,34 +40,35 @@ export const PLAYER_IMAGE_LIST : IKeyImage = {
   jirka: jirka_profile,
   simon: simon_profile,
   matous: matous_profile,
-  jezek: placeholder_profile
+  jezek: placeholder_profile,
+  placeholder: placeholder_profile
 };
 
-export const CUSTOM_PLAYER_TOKENS: IPlayerToken[] = [
-  { tokenId: "slimak", count: 0, upgrade: 1, straight: false },
-  { tokenId: "krtek", count: 0, upgrade: 2, straight: false },
-  { tokenId: "mozek", count: 0, upgrade: 3, straight: false },
-  { tokenId: "laso", count: 0, upgrade: 0, straight: false },
-  { tokenId: "slon", count: 0, upgrade: 1, straight: false },
-  { tokenId: "netopyr", count: 0, upgrade: 0, straight: false },
-  { tokenId: "kozel", count: 0, upgrade: 2, straight: false },
-  { tokenId: "kanon", count: 0, upgrade: 3, straight: false },
-  { tokenId: "ctyrlistek", count: 0, upgrade: 3, straight: false },
-  { tokenId: "moucha", count: 0, upgrade: 1, straight: false },
-];
+// export const CUSTOM_PLAYER_TOKENS: IPlayerToken[] = [
+//   { tokenId: "slimak", count: 0, upgrade: 1, straight: false },
+//   { tokenId: "krtek", count: 0, upgrade: 2, straight: false },
+//   { tokenId: "mozek", count: 0, upgrade: 3, straight: false },
+//   { tokenId: "laso", count: 0, upgrade: 0, straight: false },
+//   { tokenId: "slon", count: 0, upgrade: 1, straight: false },
+//   { tokenId: "netopyr", count: 0, upgrade: 0, straight: false },
+//   { tokenId: "kozel", count: 0, upgrade: 2, straight: false },
+//   { tokenId: "kanon", count: 0, upgrade: 3, straight: false },
+//   { tokenId: "ctyrlistek", count: 0, upgrade: 3, straight: false },
+//   { tokenId: "moucha", count: 0, upgrade: 1, straight: false },
+// ];
 
-export const CUSTOM_PLAYER_STATS : IStats = {
-    points: 0,
-    coins: 0,
-    strike: 0,
-};
+// export const CUSTOM_PLAYER_STATS : IStats = {
+//     points: 0,
+//     coins: 0,
+//     strike: 0,
+// };
 
-export const CUSTOM_PLAYER: IPlayer = {
-  id: "matej",
-  name: "Matěj",
-  title: "Král netopýrů",
-  stats: CUSTOM_PLAYER_STATS,
-  tokens: CUSTOM_PLAYER_TOKENS
-};
+// export const CUSTOM_PLAYER: IPlayer = {
+//   id: "matej",
+//   name: "Matěj",
+//   title: "Král netopýrů",
+//   stats: CUSTOM_PLAYER_STATS,
+//   tokens: CUSTOM_PLAYER_TOKENS
+// };
 
 

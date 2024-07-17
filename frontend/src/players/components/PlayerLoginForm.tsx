@@ -47,7 +47,7 @@ const PlayerLoginForm = () => {
 
         const FORM_BODY = Object.keys(DETAILS).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(DETAILS[key])).join('&');
 
-        const response = await fetch(`${SEVER_PREFIX}/api/v1/auth/token`, {
+        const response = await fetch(`${SEVER_PREFIX}/api/v1/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -66,7 +66,7 @@ const PlayerLoginForm = () => {
 
     const getPlayer = async () => {
 
-        const response = await fetch(`${SEVER_PREFIX}/api/v1/player`, {
+        const response = await fetch(`${SEVER_PREFIX}/api/v1/profile`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
