@@ -276,6 +276,16 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpgradeTokensDto"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "201": {
                         "description": ""
@@ -307,6 +317,35 @@
                 },
                 "responses": {
                     "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/spin-wheel": {
+            "post": {
+                "operationId": "ProfileController_spinWheel",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SpinWheelDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
                         "description": ""
                     }
                 },
@@ -993,6 +1032,18 @@
                 "type": "object",
                 "properties": {}
             },
+            "UpgradeTokensDto": {
+                "type": "object",
+                "properties": {
+                    "free": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                },
+                "required": [
+                    "free"
+                ]
+            },
             "UpdateStatsDto": {
                 "type": "object",
                 "properties": {
@@ -1018,6 +1069,18 @@
                     "coins",
                     "exps",
                     "free_spin"
+                ]
+            },
+            "SpinWheelDto": {
+                "type": "object",
+                "properties": {
+                    "prize": {
+                        "type": "number",
+                        "example": 7
+                    }
+                },
+                "required": [
+                    "prize"
                 ]
             },
             "CreateTokenDto": {
