@@ -241,25 +241,33 @@ export class ProfileService {
   async updateStats(playerId: string, updateStatsDto: UpdateStatsDto) {
     const player = await this.playersService.findOne({ id: playerId });
 
-    if (player.stats.coins + updateStatsDto.coins < 0) {
-      player.stats.coins = 0;
-    } else {
-      player.stats.coins += updateStatsDto.coins;
+    if (updateStatsDto.coins) {
+      if (player.stats.coins + updateStatsDto.coins < 0) {
+        player.stats.coins = 0;
+      } else {
+        player.stats.coins += updateStatsDto.coins;
+      }
     }
 
-    if (player.stats.points + updateStatsDto.points < 0) {
-      player.stats.points = 0;
-    } else {
-      player.stats.points += updateStatsDto.points;
+    if (updateStatsDto.points) {
+      if (player.stats.points + updateStatsDto.points < 0) {
+        player.stats.points = 0;
+      } else {
+        player.stats.points += updateStatsDto.points;
+      }
     }
 
-    if (player.stats.exps + updateStatsDto.exps < 0) {
-      player.stats.exps = 0;
-    } else {
-      player.stats.exps += updateStatsDto.exps;
+    if (updateStatsDto.exps) {
+      if (player.stats.exps + updateStatsDto.exps < 0) {
+        player.stats.exps = 0;
+      } else {
+        player.stats.exps += updateStatsDto.exps;
+      }
     }
 
-    player.stats.free_spin = player.stats.free_spin && updateStatsDto.free_spin;
+    if (updateStatsDto.free_spin !== null) {
+      player.stats.free_spin = updateStatsDto.free_spin;
+    }
 
     return this.playersService.update(player.id, {
       stats: player.stats,

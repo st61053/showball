@@ -1,20 +1,24 @@
-import { IsNumber, IsBoolean } from 'class-validator';
+import { IsNumber, IsBoolean, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateStatsDto {
   @ApiProperty({ example: 7 })
+  @IsOptional()
   @IsNumber()
-  points: number = 0;
+  points?: number;
 
   @ApiProperty({ example: -3 })
+  @IsOptional()
   @IsNumber()
-  coins: number = 0;
+  coins?: number;
 
   @ApiProperty({ example: 4 })
+  @IsOptional()
   @IsNumber()
-  exps: number = 0;
+  exps?: number;
 
   @ApiProperty({ example: false })
+  @IsOptional()
   @IsBoolean()
-  free_spin: boolean = true;
+  free_spin?: boolean;
 }
