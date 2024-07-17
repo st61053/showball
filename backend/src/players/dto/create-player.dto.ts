@@ -22,7 +22,7 @@ export class CreatePlayerDTO {
   @ApiProperty({ example: 'secret-password' })
   @IsNotEmpty()
   @IsString()
-  @Length(6, 50)
+  @Length(3, 50)
   password: string;
 
   @ApiProperty({ example: ['greenhorn'] })

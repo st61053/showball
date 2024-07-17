@@ -17,6 +17,7 @@ export class ProfileService {
   STRAIGHT_COINS = 10;
   STRAIGHT_POINTS = 10;
   STRAIGHT_EXPS = 0;
+  WHEEL_SPIN_COST = 5;
 
   async getProfileById(playerId: string): Promise<Player | null> {
     return this.playersService.findOne({ id: playerId });
@@ -104,6 +105,7 @@ export class ProfileService {
   async upgradeToken(
     playerId: string,
     tokenTextId: string,
+    free: boolean,
   ): Promise<Player | null> {
     const player = await this.playersService.findOne({ id: playerId });
 
@@ -151,19 +153,22 @@ export class ProfileService {
 
     const tokenLevel = Math.min(playerTokenStats.level, token.levels.length);
 
-    if (player.stats.coins < token.levels[tokenLevel - 1].nextLevelCost) {
-      throw new HttpException(
-        {
-          status: HttpStatus.CONFLICT,
-          errors: {
-            coins: 'notEnoughCoins',
+    if (!free) {
+      if (player.stats.coins < token.levels[tokenLevel - 1].nextLevelCost) {
+        throw new HttpException(
+          {
+            status: HttpStatus.CONFLICT,
+            errors: {
+              coins: 'notEnoughCoins',
+            },
           },
-        },
-        HttpStatus.CONFLICT,
-      );
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      player.stats.coins -= token.levels[tokenLevel - 1].nextLevelCost;
     }
 
-    player.stats.coins -= token.levels[tokenLevel - 1].nextLevelCost;
     playerTokenStats.level++;
 
     return this.playersService.update(player.id, {
@@ -268,6 +273,34 @@ export class ProfileService {
     if (updateStatsDto.free_spin !== null) {
       player.stats.free_spin = updateStatsDto.free_spin;
     }
+
+    return this.playersService.update(player.id, {
+      stats: player.stats,
+    });
+  }
+
+  async spinWheel(playerId: string, prize: number) {
+    const player = await this.playersService.findOne({ id: playerId });
+
+    if (player.stats.free_spin) {
+      player.stats.free_spin = false;
+    } else {
+      if (player.stats.coins < this.WHEEL_SPIN_COST) {
+        throw new HttpException(
+          {
+            status: HttpStatus.CONFLICT,
+            errors: {
+              coins: 'notEnoughCoins',
+            },
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      player.stats.coins -= this.WHEEL_SPIN_COST;
+    }
+
+    player.stats.coins += prize;
 
     return this.playersService.update(player.id, {
       stats: player.stats,

@@ -18,13 +18,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       useFactory: (configService: ConfigService) => ({
         global: true,
         secret: configService.get('jwt.secret', { infer: true }),
-        signOptions: { expiresIn: configService.get('jwt.expiresIn', { infer: true }) }
+        signOptions: {
+          expiresIn: configService.get('jwt.expiresIn', { infer: true }),
+        },
       }),
-
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

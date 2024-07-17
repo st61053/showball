@@ -22,7 +22,7 @@ async function bootstrap() {
   app.enableCors({ origin: '*' });
   app.useGlobalPipes(new ValidationPipe({}));
   app.enableVersioning({ type: VersioningType.URI });
-  app.use(helmet());
+  app.use(helmet({ crossOriginResourcePolicy: false }));
   app.use(compression());
   app.setGlobalPrefix('api');
   app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
