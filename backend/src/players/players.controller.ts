@@ -6,7 +6,6 @@ import {
   Post,
   Patch,
   Query,
-  UseGuards,
   HttpCode,
   HttpStatus,
   UseInterceptors,
@@ -24,10 +23,7 @@ import { PlayersService } from './players.service';
 import { CreatePlayerDTO } from './dto/create-player.dto';
 import { UpdatePlayerDTO } from './dto/update-player.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
-import { RolesGuard } from '../auth/guard/roles.guard';
-import { Roles } from '../auth/decorator/roles.decorator';
 import { Public } from '../auth/decorator/public.decorator';
-import { RoleEnum } from '../shared/enum/role-type.enum';
 import { Player } from './domain/player';
 
 @ApiTags('Players')
@@ -42,8 +38,6 @@ export class PlayersController {
     type: Player,
     isArray: true,
   })
-  @Roles(RoleEnum.admin)
-  @UseGuards(RolesGuard)
   @Get()
   async getPlayers(@Query() paginationQuery: PaginationQueryDto) {
     return this.playersService.findMany(paginationQuery);
@@ -52,8 +46,6 @@ export class PlayersController {
   @ApiBearerAuth()
   @ApiParam({ name: 'playerId', type: String, required: true })
   @ApiOkResponse({ description: 'Player', type: Player })
-  @UseGuards(RolesGuard)
-  @Roles(RoleEnum.admin)
   @Get('/:playerId')
   async getPlayerById(@Param('playerId') playerId: string) {
     const player = this.playersService.findOne({ id: playerId });
