@@ -4,14 +4,19 @@ import { IPlayer, IPlayerState } from "./types";
 
 export const DEFAULT_PLAYER : IPlayer = {
   id: "",
-  name: "",
-  title: "",
+  username: "",
+  title: [],
+  imageSrc: "",
   stats: {
     points: 0,
     coins: 0,
-    strike: 0,
+    exps: 0,
+    straight: 0,
+    free_spin: false,
   },
-  tokens: []
+  tokens: [],
+  roles: [],
+  challenges: []
 };
 
 const defaultState: IPlayerState = {
@@ -54,7 +59,7 @@ const defaultState: IPlayerState = {
         ...state,
         loginPlayer: {
           ...state.loginPlayer,
-          tokens: state.loginPlayer.tokens.map((token) => token.tokenId === action.token?.id ? ({
+          tokens: state.loginPlayer.tokens.map((token) => token.textId === action.token?.textId ? ({
             ...token,
             count: token.count + 1,
             straight: true

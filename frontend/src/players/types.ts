@@ -7,21 +7,30 @@ export interface IPlayerState {
 
 export interface IPlayer {
     id: string;
-    name: string;
-    title: string;
+    username: string;
+    roles: string[];
+    title: string[];
+    imageSrc: string;
     stats : IStats;
     tokens: IPlayerToken[];
+    challenges: IChallenge[];
 }
 
 export interface IStats {
     points: number;
     coins: number;
-    strike: number;
+    exps: number;
+    straight: number;
+    free_spin: boolean;
 }
 
 export interface IPlayerToken {
-    tokenId: string;
+    textId: string;
     count: number;
-    upgrade: number;
-    straight: boolean;
+    level: number;
+}
+
+export interface IChallenge {
+    textId: string;
+    timestamp: string;
 }

@@ -95,7 +95,7 @@ const Place = ({ player, place, option }: { player: IPlayer, place: number, opti
                     color: LOGIN_PLAYER.id === player.id ? theme.palette.primary.main : "black"
                 }}
             >
-                {player.name}
+                {player.username}
             </Typography>
             <Card
                 sx={{

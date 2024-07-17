@@ -14,9 +14,12 @@ import Coin from '../../store/components/Coin';
 const CustomWheel = () => {
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
     const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
-    const CAN_SPIN = useSelector((state: GlobalState) => state.players.spin);
+    const CAN_SPIN = useSelector((state: GlobalState) => state.players.loginPlayer.stats.free_spin);
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
     const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
+
+
+    useEffect(() => {console.log(LOGIN_PLAYER?.stats.coins)}, [LOGIN_PLAYER])
 
 
     const [FREE_UPGRADE_TOKEN_ID, setFreeUpgradeTokenId] = useState<string>("");
@@ -26,36 +29,60 @@ const CustomWheel = () => {
     const WHEEL_COST = 5;
 
     const getFreeUpdateToken = () => {
-        let min = 9999;
+        // let min = 9999;
 
-        LOGIN_PLAYER.tokens.forEach((token) => {
-            if (token.upgrade < min) {
-                min = token.upgrade
+        // LOGIN_PLAYER.tokens.forEach((token) => {
+        //     if (token.level < min) {
+        //         min = token.level
+        //     }
+        // })
+
+        const playerTokens = TOKENS.map((t) => {
+            const playerToken = LOGIN_PLAYER.tokens.find((ts) => ts.textId === t.textId);
+
+            return playerToken || {textId:t, level:1, count:0};
+
+            // if(!playerToken) {
+            //     return {textId:t, level:1, count:0}
+            // }
+
+            // return playerToken;
+        })
+
+        const min = Math.min(...playerTokens.map((t) => t.level))
+        const POSSIBLE_WIN_TOKENS = LOGIN_PLAYER.tokens.filter((token) => token.level === min);
+        return POSSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].textId;
+
+        // const missingToken = TOKENS.filter((t) => LOGIN_PLAYER.tokens.find((ts) => ts.textId === t.textId))
+
+        // if(missingToken.length > 0) {
+        //     const POSSIBLE_WIN_TOKENS = missingToken
+        //     return POSSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].textId;
+        // } else {
+        //     const min = Math.min(...LOGIN_PLAYER.tokens.map((ts) => ts.level))
+        //     const POSSIBLE_WIN_TOKENS = LOGIN_PLAYER.tokens.filter((token) => token.level === min);
+        //     return POSSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].textId;
+        // }
+        // setFreeUpgradeTokenId(POSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].tokenId);
+        //return POSSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].textId;
+    }
+
+    const getPlayer = async () => {
+
+        const response = await fetch(`${SEVER_PREFIX}/api/v1/profile`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
             }
         })
 
-        const POSIBLE_WIN_TOKENS = LOGIN_PLAYER.tokens.filter((token) => token.upgrade === min);
+        const json = await response.json();
 
-        // setFreeUpgradeTokenId(POSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].tokenId);
-        return POSIBLE_WIN_TOKENS[Math.floor(Math.random() * ((POSIBLE_WIN_TOKENS.length - 1) - 0)) + 0].tokenId;
-    }
-
-    const getPlayerSpin = async () => {
-
-        if (localStorage.access_token) {
-            const response = await fetch(`${SEVER_PREFIX}/api/v1/can-spin`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
-                },
-            })
-
-            const json = await response.json();
-
-            if (response.ok) {
-                dispatch(canSpin(json.free_spin))
-            }
+        if (response.ok) {
+            dispatch(loginPlayer(json))
+        } else {
+            localStorage.removeItem('access_token');
         }
     }
 
@@ -63,35 +90,36 @@ const CustomWheel = () => {
         setRulleteRerender(false);
 
         if (localStorage.access_token) {
-            await fetch(`${SEVER_PREFIX}/api/v1/wheel-spin`, {
+            await fetch(`${SEVER_PREFIX}/api/v1/profile/spin-wheel`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
                 },
-                body: JSON.stringify({ prize: WIN_LIST[data[prizeNumber].option], free: CAN_SPIN })
+                body: JSON.stringify({ prize: WIN_LIST[data[prizeNumber].option] })
             })
                 .then(response => response.json())
                 .then(async json => {
                     if (data[prizeNumber].option === 'secret') {
 
                         const tokenId = getFreeUpdateToken();
-                        await fetch(`${SEVER_PREFIX}/api/v1/upgrade-token`, {
+                        console.log(tokenId)
+                        await fetch(`${SEVER_PREFIX}/api/v1/profile/upgrade-token/${tokenId}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
                             },
-                            body: JSON.stringify({ token_id: tokenId, free: true })
+                            body: JSON.stringify({ free: true })
                         })
                             .then(response => response.json())
                             .then(async js => {
                                 setFreeUpgradeTokenId(tokenId);
-                                await getPlayerSpin();
+                                await getPlayer();
                                 dispatch(loginPlayer(js));
                             })
                     } else {
-                        await getPlayerSpin();
+                        // await getPlayer();
                         dispatch(loginPlayer(json));
                     }
 
@@ -103,36 +131,6 @@ const CustomWheel = () => {
                 .catch(error => {
                     wheelSpin();
                 });
-
-            // const json = await response.json();
-            // if (response.ok) {
-
-            //     if (data[prizeNumber].option === 'secret') {
-
-            //         const tokenId = await getFreeUpdateToken();
-
-            //         const res = await fetch(`${SEVER_PREFIX}/api/v1/upgrade-token`, {
-            //             method: 'POST',
-            //             headers: {
-            //                 'Content-Type': 'application/json',
-            //                 'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
-            //             },
-            //             body: JSON.stringify({ token_id: tokenId, free: true })
-            //         })
-
-            //         setFreeUpgradeTokenId(tokenId);
-            //         const j = await res.json();
-
-            //         if (res.ok) {
-            //             await getPlayerSpin();
-            //             dispatch(loginPlayer(j));
-            //         }
-            //     } else {
-            //         await getPlayerSpin();
-            //         dispatch(loginPlayer(json));
-            //     }
-
-            // }
         }
     }
 
@@ -286,7 +284,7 @@ const CustomWheel = () => {
 
                     {
                         TOKENS && FREE_UPGRADE_TOKEN_ID !== "" && RULLETE_RERENDER &&
-                        <Token token={TOKENS?.find((tok) => tok.id === FREE_UPGRADE_TOKEN_ID) || TOKENS[0]} width={50} />
+                        <Token token={TOKENS?.find((tok) => tok.textId === FREE_UPGRADE_TOKEN_ID) || TOKENS[0]} width={50} />
                     }
 
 
@@ -314,7 +312,7 @@ const CustomWheel = () => {
                         gap: 1
                     }}
                     onClick={handleSpinClick}
-                    disabled={Boolean(LOGIN_PLAYER.stats.coins < WHEEL_COST && !CAN_SPIN)}
+                    disabled={Boolean(LOGIN_PLAYER.stats.coins < WHEEL_COST && !CAN_SPIN) || !RULLETE_RERENDER}
                 >
 
                     <Typography>

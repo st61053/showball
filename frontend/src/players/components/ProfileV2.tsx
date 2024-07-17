@@ -25,13 +25,18 @@ import { AnyAction } from "redux";
 import { IPlayer } from "../types";
 import { access } from "fs";
 import ProgressBar from "./ProgressBar";
-import TokenParticles from "./TokenParticles";
 import LogoutIcon from '@mui/icons-material/Logout';
+import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
+import HighchartsMore from 'highcharts/highcharts-more';
+
+HighchartsMore(Highcharts);
 
 const ProfileV2 = () => {
 
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
     const LOGIN_PLAYER = useSelector((state: GlobalState) => state.players.loginPlayer);
+    const TOKENS = useSelector((state: GlobalState) => state.tokens.tokens);
     const SEVER_PREFIX = useSelector((state: GlobalState) => state.settings.serverPrefix);
     const PLAYERS = useSelector((state: GlobalState) => state.players.players);
 
@@ -52,7 +57,7 @@ const ProfileV2 = () => {
     useEffect(() => {
         const getPlayer = async () => {
 
-            const response = await fetch(`${SEVER_PREFIX}/api/v1/player`, {
+            const response = await fetch(`${SEVER_PREFIX}/api/v1/profile`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -83,6 +88,20 @@ const ProfileV2 = () => {
         localStorage.removeItem('access_token');
         setRedirect(true);
     }
+
+    const missingToStraightCount = () => {
+        return LOGIN_PLAYER.tokens.reduce((accumulator, currentValue) => accumulator + Number(currentValue.count > LOGIN_PLAYER.stats.straight), 0)
+    }
+
+    const tokensCounts = () => {
+        return TOKENS.map(t => {
+            const playerToken = LOGIN_PLAYER.tokens.find((ts) => ts.textId === t.textId);
+
+            return playerToken ? playerToken.count : 0;
+        })
+    }
+
+    const categoriesWithImages = TOKENS.map((t) => { return `<img src=${SEVER_PREFIX}/${t.imageSrc} alt="Sales" style="width: 25px; height: 25px;" />` });
 
     return (
         <>
@@ -166,7 +185,12 @@ const ProfileV2 = () => {
                                             width: 180
                                         }}
                                     >
-                                        <img src={PLAYER_IMAGE_LIST[LOGIN_PLAYER.id]} alt={LOGIN_PLAYER.name} height={"100%"}></img>
+                                        {
+                                            LOGIN_PLAYER.imageSrc
+                                                ? <img src={`${SEVER_PREFIX}/${LOGIN_PLAYER.imageSrc}`} alt={LOGIN_PLAYER.username} height={"100%"}></img>
+                                                : <img src={PLAYER_IMAGE_LIST["placeholder"]} alt={LOGIN_PLAYER.username} height={"100%"}></img>
+                                        }
+
                                     </Box>
                                     <Box
                                         sx={{
@@ -189,7 +213,7 @@ const ProfileV2 = () => {
                                                             pb: 0
                                                         }}
                                                     >
-                                                        {LOGIN_PLAYER.name}
+                                                        {LOGIN_PLAYER.username}
                                                     </Typography>
                                                 </Grid>
                                                 <Grid item xs={12}>
@@ -206,16 +230,13 @@ const ProfileV2 = () => {
                                                 <Grid item xs={12}>
                                                     <Grid container spacing={0.8} sx={{ pt: 1.8, pr: 3 }}>
                                                         <Grid item xs={12}>
-                                                            <ProgressBar title="strike" count={LOGIN_PLAYER.stats.strike} max={22} level={3} />
-                                                        </Grid>
-                                                        <Grid item xs={12}>
                                                             <ProgressBar title="points" count={LOGIN_PLAYER.stats.points} max={getMax("points")} level={1} />
                                                         </Grid>
                                                         <Grid item xs={12}>
                                                             <ProgressBar title="coins" count={LOGIN_PLAYER.stats.coins} max={getMax("coins")} level={2} />
                                                         </Grid>
                                                         <Grid item xs={12}>
-                                                            <ProgressBar title="postupka" count={LOGIN_PLAYER.tokens.reduce((prev, token) => token.straight ? prev + 1 : prev, 0)} max={10} level={0} />
+                                                            <ProgressBar title="postupka" count={missingToStraightCount()} max={TOKENS.length} level={0} />
                                                         </Grid>
                                                     </Grid>
                                                 </Grid>
@@ -246,9 +267,81 @@ const ProfileV2 = () => {
                                                 height: "calc(100% - 22px)"
                                             }}
                                         >
+                                            <HighchartsReact
+                                                highcharts={Highcharts}
+                                                containerProps={{ style: { height: "100%", width: "100%" } }}
+                                                options={{
+                                                    chart: {
+                                                        polar: true,
+                                                        type: 'line'
+                                                    },
+                                                    title: {
+                                                        text: null,
+                                                    },
 
-                                            <TokenParticles />
+                                                    pane: {
+                                                        size: '80%'
+                                                    },
 
+                                                    xAxis: {
+                                                        categories: categoriesWithImages,
+                                                        tickmarkPlacement: 'on',
+                                                        lineWidth: 0,
+                                                        labels: {
+                                                            useHTML: true,
+                                                            formatter: function () {
+                                                                return this.value;
+                                                            },
+                                                            style: {
+                                                                whiteSpace: 'nowrap'
+                                                            }
+                                                        }
+                                                    },
+
+                                                    yAxis: {
+                                                        gridLineInterpolation: 'polygon',
+                                                        lineWidth: 0,
+                                                        min: 0,
+                                                        tickInterval: 2
+                                                    },
+
+                                                    tooltip: {
+                                                        enabled: false,
+                                                        shared: true,
+                                                        pointFormat: '<span>' +
+                                                            '{point.y:,.0f}<br/>'
+                                                    },
+
+                                                    legend: {
+                                                        enabled: false,
+                                                    },
+
+                                                    series: [{
+                                                        name: 'Allocated Budget',
+                                                        //data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                                                        data: tokensCounts(),
+                                                        pointPlacement: 'on'
+                                                    }],
+
+                                                    responsive: {
+                                                        rules: [{
+                                                            condition: {
+                                                                maxWidth: 500
+                                                            },
+                                                            chartOptions: {
+                                                                legend: {
+                                                                    align: 'center',
+                                                                    verticalAlign: 'bottom',
+                                                                    layout: 'horizontal'
+                                                                },
+                                                                pane: {
+                                                                    size: '70%'
+                                                                }
+                                                            }
+                                                        }]
+                                                    }
+                                                }}
+                                            />
                                         </Grid>
                                     </Grid>
                                 </Card>

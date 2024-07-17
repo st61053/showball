@@ -35,7 +35,7 @@ const TokenSwiper = () => {
     }
 
     useEffect(() => {
-        swiperRef?.slideTo(TOKENS?.findIndex((token) => token.id === SELECTED_TOKEN?.id) ?? 0, 0);
+        swiperRef?.slideTo(TOKENS?.findIndex((token) => token.textId === SELECTED_TOKEN?.textId) ?? 0, 0);
     }, [TOKENS, SELECTED_TOKEN, swiperRef])
 
     return (
@@ -49,7 +49,7 @@ const TokenSwiper = () => {
                 TOKENS &&
                 <Swip
                     onSwiper={setSwiperRef}
-                    initialSlide={TOKENS?.findIndex((token) => token.id === SELECTED_TOKEN?.id) || 0}
+                    initialSlide={TOKENS?.findIndex((token) => token.textId === SELECTED_TOKEN?.textId) || 0}
                     navigation={true}
                     modules={[Navigation]}
                     slidesPerView={1}

@@ -4,13 +4,20 @@ export interface ITokenState {
 }
 
 export interface IToken {
-    id: string,
-    name: string,
-    upgrades: ITokenMap,
-    points: ITokenMap,
-    coins: ITokenMap
+    textId: string;
+    name: string;
+    description: string;
+    imageSrc: string;
+    levels: ILevel[];
+    maxLevel: number;
+    state: boolean;
 }
 
-export interface ITokenMap {
-    [key: number]: number,
+
+export interface ILevel {
+    coins: number;
+    points: number;
+    exps: number;
+    nextLevelCost: number;
 }
+

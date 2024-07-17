@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { GlobalState } from "../../global";
-import { canSpin, initPlayers } from "../../players/actions";
+import { canSpin, initPlayers, loginPlayer } from "../../players/actions";
 import ProfileV2 from "../../players/components/ProfileV2";
 import { Box } from "@mui/material";
 const ShowBallSwiper = () => {
@@ -53,21 +53,40 @@ const ShowBallSwiper = () => {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    //'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                    'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
                 },
             })
 
             const json = await response.json();
 
             if (response.ok) {
-                dispatch(initPlayers(json.players))
+                dispatch(initPlayers(json))
             }
         }
     }
 
+    const getPlayer = async () => {
+
+        const response = await fetch(`${SEVER_PREFIX}/api/v1/profile`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+            }
+        })
+
+        const json = await response.json();
+
+        if (response.ok) {
+            dispatch(loginPlayer(json))
+        } else {
+            localStorage.removeItem('access_token');
+        }
+    }
+
     const swipe = (slide: Swiper) => {
-        if (slide.activeIndex === 4) {
-            getPlayerSpin();
+        if(localStorage.access_token) {
+            getPlayer();
         }
         getPlayers();
     }

@@ -35,14 +35,14 @@ const Leaderboard = () => {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    //'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
+                    'Authorization': `Bearer ${JSON.parse(localStorage.access_token)}`
                 },
             })
 
             const json = await response.json();
 
             if (response.ok) {
-                dispatch(initPlayers(json.players))
+                dispatch(initPlayers(json))
             }
         }
     }
