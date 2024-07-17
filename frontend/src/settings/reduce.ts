@@ -1,9 +1,8 @@
 import { AppAction } from "../global";
 import { ISettingsState } from "./types";
 
-
 const defaultState: ISettingsState = {
-    serverPrefix: "http://pi.local:8080",
+  serverPrefix: "http://localhost:8080",
 };
 
 export const settingsReducer = (
