@@ -1,26 +1,26 @@
-FROM node:21-alpine AS builder
+FROM node:21-alpine
 
-# Declaring env
-ENV NODE_ENV production
-
-# Setting up the work directory
+# Create app directory
 WORKDIR /app
 
-# Installing dependencies
-COPY ./package.json ./
+ENV PATH /app/node_modules/.bin:$PATH
+
+# Copy dependency definitions
+
+COPY package.json ./
+COPY package-lock.json ./
+
+# Install dependecies
+
 RUN npm install
 
-# Copying all the files in our project
-COPY . .
+RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 
-# Building our application
-RUN npm run build
+# Get all the code needed to run the app
+COPY . ./
 
-# Fetching the latest nginx image
-FROM nginx
+# Expose the port the app runs in
+EXPOSE 3000
 
-# Copying built assets from builder
-COPY --from=builder /app/build /usr/share/nginx/html
-
-# Copying our nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Serve the app
+CMD ["npm", "start"]
