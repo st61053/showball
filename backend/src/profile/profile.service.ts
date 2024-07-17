@@ -279,7 +279,7 @@ export class ProfileService {
     });
   }
 
-  async spinWheel(playerId: string) {
+  async spinWheel(playerId: string, prize: number) {
     const player = await this.playersService.findOne({ id: playerId });
 
     if (player.stats.free_spin) {
@@ -299,6 +299,8 @@ export class ProfileService {
 
       player.stats.coins -= this.WHEEL_SPIN_COST;
     }
+
+    player.stats.coins += prize;
 
     return this.playersService.update(player.id, {
       stats: player.stats,

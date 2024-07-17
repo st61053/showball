@@ -17,6 +17,7 @@ import {
 import { Player } from 'src/players/domain/player';
 import { UpdateStatsDto } from './dto/update-stats.dto';
 import { UpgradeTokensDto } from './dto/upgrade-token.dto';
+import { SpinWheelDto } from './dto/spin-wheel.dto';
 
 @ApiBearerAuth()
 @ApiTags('Profile')
@@ -80,7 +81,7 @@ export class ProfileController {
   }
 
   @Post('/spin-wheel')
-  async spinWheel(@Request() req) {
-    return this.profileServices.spinWheel(req.user.playerId);
+  async spinWheel(@Request() req, @Body() body: SpinWheelDto) {
+    return this.profileServices.spinWheel(req.user.playerId, body.prize);
   }
 }
