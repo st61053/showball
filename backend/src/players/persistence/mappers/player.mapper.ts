@@ -41,6 +41,7 @@ export class PlayerMapper {
     playerDoc.username = player.username;
     playerDoc.password = player.password;
     playerDoc.roles = player.roles;
+    playerDoc.imageSrc = 'uploads/players/' + player.username + '.png';
     playerDoc.titles = player.titles;
 
     const playerStatsDoc = new PlayerStatsSchemaClass();
